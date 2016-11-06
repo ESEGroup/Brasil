@@ -1,4 +1,4 @@
-resources = [
+fakeresources = [
   {
     name: "res1",
     department : "dep1",
@@ -159,5 +159,7 @@ resources = [
     description: "desc",
     category: "F",
   },
+];
 
-]
+filteredfakeresources = fakeresources;
+sortedfakeresources = filteredfakeresources;

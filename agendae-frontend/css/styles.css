@@ -575,6 +575,10 @@ img.article-image {
     padding-top: 24px;
   }
 
+  .agendae-filters {
+    background-color: rgb(0, 196, 169);
+  }
+
   .agendae-sub-slogan {
     font-size: 16px;
     margin: 0 16px;
