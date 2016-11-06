@@ -1,0 +1,609 @@
+/**
+ * Reference colors:
+ * weak blue: rgb(0, 196, 169)
+ * faded yellow: rgb(255, 247, 0)
+ * orange(255, 103, 0)
+ */
+
+body {
+  margin: 0;
+}
+
+/* Disable ugly boxes around images in IE10 */
+a img{
+  border: 0px;
+}
+
+::-moz-selection {
+  background-color: #6ab344;
+  color: #fff;
+}
+
+::selection {
+  background-color: #6ab344;
+  color: #fff;
+}
+
+
+.sepia {
+    -webkit-filter: sepia(50%);
+    filter: sepia(50%);
+}
+
+.blur {
+    -webkit-filter: blur(4px);
+    filter: blur(4px);
+}
+
+.agendae-search-box .mdl-textfield__input {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.agendae-header .mdl-menu__container {
+  z-index: 50;
+  margin: 0 !important;
+}
+
+
+.mdl-textfield--expandable {
+  width: auto;
+}
+
+.agendae-fab {
+  position: absolute;
+  right: 20%;
+  bottom: -26px;
+  z-index: 3;
+  background: #64ffda !important;
+  color: black !important;
+}
+
+.agendae-mobile-title {
+  display: none !important;
+}
+
+
+.agendae-logo-image {
+  height: 28px;
+  width: 140px;
+}
+
+
+.agendae-header {
+  overflow: visible;
+  background-color: white;
+}
+
+  .agendae-header .material-icons {
+    color: #767777 !important;
+  }
+
+  .agendae-header .mdl-layout__drawer-button {
+    background: transparent;
+    color: #767777;
+  }
+
+  .agendae-header .mdl-navigation__link {
+    color: #757575;
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .agendae-navigation-container {
+    /* Simple hack to make the overflow happen to the left instead... */
+    direction: rtl;
+    -webkit-order: 1;
+        -ms-flex-order: 1;
+            order: 1;
+    width: 500px;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        width 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .agendae-navigation {
+    /* ... and now make sure the content is actually LTR */
+    direction: ltr;
+    -webkit-justify-content: flex-end;
+        -ms-flex-pack: end;
+            justify-content: flex-end;
+    width: 800px;
+  }
+
+  .agendae-search-box.is-focused + .agendae-navigation-container {
+    opacity: 0;
+    width: 100px;
+  }
+
+.agendae-content-login {
+  background-image: url("../images/calendar.jpg");
+  background-size: cover;
+}
+
+.agendae-section-title {
+  padding-left: 20px;
+}
+
+  .agendae-navigation .mdl-navigation__link {
+    display: inline-block;
+    height: 60px;
+    line-height: 68px;
+    background-color: transparent !important;
+    border-bottom: 4px solid transparent;
+  }
+
+    .agendae-navigation .mdl-navigation__link:hover {
+      border-bottom: 4px solid #312B2B;
+    }
+
+  .agendae-search-box {
+    -webkit-order: 2;
+        -ms-flex-order: 2;
+            order: 2;
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  .agendae-search-bar {
+    padding-top: 10px;
+  }
+
+  .agendae-more-button {
+    -webkit-order: 3;
+        -ms-flex-order: 3;
+            order: 3;
+  }
+
+
+.agendae-drawer {
+  border-right: none;
+}
+
+  .agendae-drawer-separator {
+    height: 1px;
+    background-color: #000;
+    margin: 8px 0;
+  }
+
+  .agendae-drawer .mdl-navigation__link.mdl-navigation__link {
+    font-size: 14px;
+    color: #312B2B;
+  }
+
+  .agendae-drawer span.mdl-navigation__link.mdl-navigation__link {
+    color: #312B2B;
+  }
+
+  .agendae-drawer .mdl-layout-title {
+    position: relative;
+    background: #fff;
+    height: 160px;
+  }
+
+    .agendae-drawer .agendae-logo-image {
+      position: absolute;
+      bottom: 16px;
+    }
+
+.logo-font {
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  line-height: 1;
+  color: #767777;
+  font-weight: 500;
+}
+
+.agendae-slogan {
+  font-size: 60px;
+  padding-top: 160px;
+}
+
+.agendae-sub-slogan {
+  font-size: 21px;
+  padding-top: 24px;
+}
+
+.agendae-create-character {
+  font-size: 21px;
+  padding-top: 400px;
+}
+
+  .agendae-create-character a {
+    text-decoration: none;
+    color: #767777;
+    font-weight: 300;
+  }
+
+.agendae-screen-section {
+  position: relative;
+  padding-top: 60px;
+  padding-bottom: 80px;
+}
+
+.agendae-screens {
+  text-align: right;
+  width: 100%;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+
+.agendae-screen {
+  text-align: center;
+}
+
+.agendae-logo-highlight {
+  width: 40%;
+}
+
+.agendae-screen .agendae-link {
+  margin-top: 16px;
+  display: block;
+  z-index: 2;
+}
+
+.agendae-image-link {
+  text-decoration: none;
+}
+
+.agendae-wear {
+  display: inline-block;
+  width: 160px;
+  margin-right: 32px;
+}
+
+  .agendae-wear .agendae-screen-image {
+    width: 40%;
+    z-index: 1;
+  }
+
+
+.agendae-phone {
+  display: inline-block;
+  width: 64px;
+  margin-right: 48px;
+}
+
+  .agendae-phone .agendae-screen-image {
+    width: 100%;
+    z-index: 1;
+  }
+
+
+.agendae-tablet {
+  display: inline-block;
+  width: 110px;
+  margin-right: 64px;
+}
+
+  .agendae-tablet .agendae-screen-image {
+    width: 100%;
+    z-index: 1;
+  }
+
+  .agendae-tablet .agendae-link {
+    display: block;
+    z-index: 2;
+  }
+
+
+.agendae-tv {
+  display: inline-block;
+  width: 300px;
+  margin-right: 80px;
+}
+
+  .agendae-tv .agendae-screen-image {
+    width: 100%;
+    z-index: 1;
+  }
+
+
+.agendae-auto {
+  display: inline-block;
+  width: 300px;
+  overflow: hidden;
+}
+
+  .agendae-auto .agendae-screen-image {
+    display: block;
+    height: 300px;
+    z-index: 1;
+  }
+
+
+.agendae-wear-section {
+  position: relative;
+  background: url('../images/wear.png') center top no-repeat;
+  background-size: cover;
+  height: 800px;
+}
+
+.agendae-wear-band {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background-color: #37474f;
+}
+
+.agendae-wear-band-text {
+  max-width: 800px;
+  margin-left: 25%;
+  padding: 24px;
+  text-align: left;
+  color: white;
+}
+
+  .agendae-wear-band-text p {
+    padding-top: 8px;
+  }
+
+.agendae-link {
+  text-decoration: none;
+  color: #8bc34a !important;
+}
+
+  .agendae-link:hover {
+    color: #7cb342 !important;
+  }
+
+  .agendae-link .material-icons {
+    position: relative;
+    top: -1px;
+    vertical-align: middle;
+  }
+
+.agendae-alt-link {
+  text-decoration: none;
+  color: #64ffda !important;
+  font-size: 16px;
+}
+
+  .agendae-alt-link:hover {
+    color: #00bfa5 !important;
+  }
+
+  .agendae-alt-link .material-icons {
+    position: relative;
+    top: 6px;
+  }
+
+.agendae-customized-section {
+  text-align: center;
+}
+
+.agendae-customized-section-text {
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 80px 16px 0 16px;
+}
+
+  .agendae-customized-section-text p {
+    padding-top: 16px;
+  }
+
+.agendae-more-section {
+  padding: 80px 0;
+  max-width: 1044px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.agendae-card-container {
+}
+
+  .agendae-card-container .mdl-card__media {
+    overflow: hidden;
+    background: transparent;
+  }
+
+    .agendae-card-container .mdl-card__media img {
+      width: 100%;
+    }
+
+  .agendae-card-container .mdl-card__title {
+    background: transparent;
+    height: auto;
+  }
+
+  .agendae-card-container .mdl-card__title-text {
+    color: black;
+    height: auto;
+  }
+
+  .agendae-card-container .mdl-card__supporting-text {
+    height: auto;
+    color: black;
+    padding-bottom: 56px;
+  }
+
+  .agendae-card-container .mdl-card__actions {
+    position: absolute;
+    bottom: 0;
+  }
+
+  .agendae-card-container .mdl-card__actions a {
+    border-top: none;
+    font-size: 16px;
+  }
+
+.agendae-footer {
+  background-color: #fafafa;
+  position: absolute;
+  bottom: 0;
+  padding-top: 20px;
+  text-align: center;
+}
+
+  .agendae-footer a:hover {
+    color: #8bc34a;
+  }
+
+  .agendae-footer .mdl-mega-footer--top-section::after {
+    border-bottom: none;
+  }
+
+  .agendae-footer .mdl-mega-footer--middle-section::after {
+    border-bottom: none;
+  }
+
+  .agendae-footer .mdl-mega-footer--bottom-section {
+    position: relative;
+  }
+
+  .agendae-footer .mdl-mega-footer--bottom-section a {
+    margin-right: 2em;
+  }
+
+  .agendae-footer .mdl-mega-footer--right-section a .material-icons {
+    position: relative;
+    top: 6px;
+  }
+
+
+.agendae-link-menu:hover {
+  cursor: pointer;
+}
+
+.agendae-highligth-section {
+  margin-top: 50px;
+}
+
+.agendae-sub-slogan {
+  color: white;
+}
+
+/*login*/
+.login-card-wide.mdl-card {
+  width: 512px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+.login-card-wide > .mdl-card__title {
+  color: #fff;
+  height: 176px;
+}
+.login-card-wide > .mdl-card__menu {
+  color: #fff;
+}
+
+/*About style*/
+.about-copy {
+  max-width: 700px;
+}
+
+img.article-image {
+  width: 75%;
+  height: auto;
+  background-color: white;
+
+}
+
+.about-article-image {
+  text-align: center;
+  padding-bottom: 20px;
+}
+
+.about-max-width {
+  max-width: 900px;
+  margin: auto;
+}
+
+
+/**** Mobile layout ****/
+@media (max-width: 900px) {
+  .agendae-navigation-container {
+    display: none;
+  }
+
+  .agendae-logo-highlight {
+    width: 90%
+  }
+
+  .agendae-disable-mobile {
+    display: none;
+  }
+
+  .agendae-title {
+    display: none !important;
+  }
+
+  .agendae-search-bar {
+    padding-left: 20px;
+  }
+
+  .agendae-mobile-title {
+    display: block !important;
+    position: absolute;
+    left: calc(50% - 70px);
+    top: 12px;
+    transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .login-card-wide.mdl-card {
+    width: 90%;
+    display: block;
+    margin-top: 50px;
+    margin-bottom: 50px;
+  }
+
+  /* WebViews in iOS 9 break the "~" operator, and WebViews in OS X 10.10 break
+     consecutive "+" operators in some cases. Therefore, we need to use both
+     here to cover all the bases. */
+  .agendae.agendae-search-box.is-focused ~ .agendae-mobile-title,
+  .agendae-search-box.is-focused + .agendae-navigation-container + .agendae-mobile-title {
+    opacity: 0;
+  }
+
+  .agendae-more-button {
+    display: none;
+  }
+
+  .agendae-search-box.is-focused {
+    width: calc(100% - 48px);
+  }
+
+  .agendae-search-box .mdl-textfield__expandable-holder {
+    width: 100%;
+  }
+
+  .agendae-slogan {
+    font-size: 26px;
+    margin: 0 16px;
+    padding-top: 24px;
+  }
+
+  .agendae-filters {
+    background-color: rgb(0, 196, 169);
+  }
+
+  .agendae-sub-slogan {
+    font-size: 16px;
+    margin: 0 16px;
+    padding-top: 8px;
+  }
+
+  .agendae-create-character {
+    padding-top: 200px;
+    font-size: 16px;
+  }
+
+  .agendae-create-character img {
+    height: 12px;
+  }
+
+  .agendae-fab {
+    display: none;
+  }
+
+  .agendae-wear-band-text {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .agendae-footer .mdl-mega-footer--bottom-section {
+    display: none;
+  }
+}

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Introducing Lollipop, a sweet new take on agendae.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Agendae</title>
+
+    <!-- Page styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+    #view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+      <div class="agendae-header mdl-layout__header mdl-layout__header--waterfall">
+        <div class="mdl-layout__header-row">
+          <span class="agendae-title mdl-layout-title">
+            <img class="agendae-logo-image" src="images/agendae-logo-black-v1.png">
+          </span>
+          <div class="agendae-header-spacer mdl-layout-spacer"></div>
+          <div class="agendae-search-box mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right mdl-textfield--full-width">
+            <div class="mdl-textfield__expandable-holder">
+              <input class="mdl-textfield__input" type="text" id="search-field">
+            </div>
+          </div>
+          <!-- Navigation -->
+          <div class="agendae-navigation-container">
+            <nav class="agendae-navigation mdl-navigation">
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="login.html">MEU CADASTRO</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="about.html">SOBRE</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="https://ufrj.br/">UFRJ</a>
+            </nav>
+          </div>
+
+          <span class="agendae-mobile-title mdl-layout-title">
+            <img class="agendae-logo-image" src="images/agendae-logo-black-v1.png">
+          </span>
+        </div>
+      </div>
+
+      <div class="agendae-drawer mdl-layout__drawer">
+        <span class="mdl-layout-title">
+          <img class="agendae-logo-image" src="images/agendae-logo-black-v1.png">
+        </span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="login.html">MEU CADASTRO</a>
+          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="about.html">SOBRE</a>
+          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="https://ufrj.br/">UFRJ</a>
+          <div class="agendae-drawer-separator"></div>
+          <span class="mdl-navigation__link" href="">Versão 0.0.1</span>
+          <span class="mdl-navigation__link" href="">Agendae &copy; 2016</span>
+        </nav>
+      </div>
+
+      <div class="agendae-content mdl-layout__content">
+
+        <div class="mdl-grid">
+          <div class="agendae-section-title mdl-cell--3-col">
+            <h3 class=" mdl-typography--headline">Catálogo de recursos</h3>
+          </div>
+          <div class="mdl-cell--9-col">
+            <form class="agendae-search-bar">
+              <i class="material-icons">search</i>
+              <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                <input class="mdl-textfield__input" type="text" id="sample3">
+                <label class="mdl-textfield__label" for="sample3">Busca...</label>
+              </div>
+            </form>
+          </div>
+        </div>
+        <hr>
+
+        <div class="mdl-grid">
+          <div class="mdl-cell mdl-cell--3-col">
+            <div class="mdl-card mdl-shadow--2dp">
+              <div class="mdl-card__title agendae-filters">
+                <h2 class="mdl-card__title-text">Filtros</h2>
+              </div>
+              <div class="mdl-card__supporting-text" id="filter-tables">
+
+              </div>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--9-col">
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <script src="javascript/fakeresources.js"></script>
+    <script src="javascript/fakebackend.js"></script>
+    <script>
+      fillFilters();
+    </script>
+  </body>
+</html>
