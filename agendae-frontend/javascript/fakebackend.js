@@ -1,6 +1,7 @@
 // this is just a buch of functions that simulates the real backend for the mockup
 /*global fakeresources*/
-/*jslint browser:true */
+/*global filteredfakeresources*/
+/*jslint browser:true*/
 
 var data = {
         filtertables: ["Categorias", "Departamentos", "Disponibilidade"],
@@ -26,9 +27,36 @@ function doLogin() {
 function applyFilters() {
     "use strict";
     var tables = data.filtertables,
-
-        it;
+        it,
+        jt,
+        elements;
+    // get checked filters
     for (it = 0; it < tables.length; it += 1) {
+        elements = document.getElementsByClassName("table-el-" + tables[it]);
+        for (jt = 0; jt < elements.length; jt += 1) {
+            if (elements[jt].className.indexOf("is-checked") > -1) {
+                if (it === 0) { // category
+                    data.filters.categories.push(document.getElementById("table-el-" + tables[it]).value);
+                }
+                if (it === 1) { // departments
+                    data.filters.departments.push(document.getElementById("table-el-" + tables[it]).value);
+                }
+                if (it === 2) { // statuses
+                    data.filters.statuses.push(document.getElementById("table-el-" + tables[it]).value);
+                }
+            }
+        }
+    }
+    // select final resources
+    for (it = 0; it < fakeresources.length; it += 1) {
+      // will select the resource if a filtered field is matched or the filtered field has no selected values
+        if (data.filters.categories.indexOf(fakeresources[it].category) !== -1 || data.filters.categories.length === 0) {
+            if (data.filters.departments.indexOf(fakeresources[it].department) !== -1 || data.filters.departments.length === 0) {
+                if (data.filters.statuses.indexOf(fakeresources[it].status) !== -1 || data.filters.statuses.length === 0) {
+                    filteredfakeresources.push(fakeresources[it]);
+                }
+            }
+        }
     }
 }
 
@@ -79,7 +107,7 @@ function fillFilters() {
         // set table values
         for (jt = 1; jt < tables[it].length; jt += 1) {
             html += '<tr class="table-el-' + tables[it][0] + '" style="display: none;">';
-            html += '<td class="mdl-data-table__cell--non-numeric">' + tables[it][jt] + '</td>';
+            html += '<td id="table-el-' + tables[it][0] + '" class="mdl-data-table__cell--non-numeric">' + tables[it][jt] + '</td>';
             html += '</tr>';
         }
         // end table
