@@ -1,6 +1,8 @@
 // this is just a buch of functions that simulates the real backend for the mockup
 /*global fakeresources*/
 /*global filteredfakeresources*/
+/*global Fts_fuzzy_match_async*/
+/*global fuzzy_match*/
 /*jslint browser:true*/
 
 var data = {
@@ -11,7 +13,8 @@ var data = {
             statuses: []
         },
         resources: fakeresources,
-        filteredresources: filteredfakeresources
+        filteredresources: filteredfakeresources,
+        queriedresources: filteredfakeresources
     };
 
 function doLogin() {
@@ -65,7 +68,7 @@ function applyCatalogFilters() {
     }
 }
 
-function hideCatalogTable(table) {
+function hideCatalogFilterTable(table) {
     "use strict";
     var i,
         elements = document.getElementsByClassName("table-el-" + table),
@@ -74,6 +77,90 @@ function hideCatalogTable(table) {
         elements[i].style.display = displayState;
     }
     document.getElementById('table-nm-' + table).innerHTML = (displayState === "") ? '<b>' + table + '</b><i class="material-icons">expand_less</i>' : '<b>' + table + '</b><i class="material-icons">expand_more</i>';
+}
+
+function fillCatalogResources() {
+    "use strict";
+    var it,
+        html;
+    html = "";
+    if (data.queriedresources.length === 0) {
+      //todo: embelezr essa mensagem
+        html += '<div class="mdl-card mdl-shadow--2dp">';
+        html += "[WIP] NENHUM RECURSO ENCONTRADO";
+        html += '</div>';
+    }
+    for (it = 0; it < data.queriedresources.length; it += 1) {
+        if (it % 3 === 0) {
+            html += '<div class="mdl-grid">';
+        }
+        html += '<div class="mdl-cell mdl-cell--4-col">';
+        html += '<div class="mdl-card mdl-shadow--2dp" style="width:100%">';
+        html += "[WIP] TESTE";
+        html += '</div>';
+        html += '</div>';
+        if (it % 3 === 2) {
+            html += "</div></br>";
+        }
+    }
+    document.getElementById('resources-grid').innerHTML = html;
+}
+
+function applyCatalogQuery() {
+    "use strict";
+    var it,
+        resourcename,
+        pattern,
+        patternField,
+        asyncMatcher,
+        filteredresourcesnames,
+        queriedresourcesnames;
+
+    patternField = document.getElementById('catalog-query');
+    if (!patternField) {
+        return;
+    }
+
+    pattern = patternField.value;
+    if (pattern.length === 0 || pattern === "") {
+        data.queriedresources = data.filteredresources;
+        return;
+    }
+
+    filteredresourcesnames = [];
+    queriedresourcesnames = [];
+    for (it = 0; it < data.filteredresources.length; it += 1) {
+        resourcename = data.filteredresources.name;
+        filteredresourcesnames.push(resourcename);
+    }
+
+    asyncMatcher = new Fts_fuzzy_match_async(fuzzy_match, pattern, data.filteredresources, function (results) {
+        // Scored function requires sorting
+        var i,
+            j,
+            count,
+            results_size,
+            resources_size;
+        results = results
+            .sort(function (a, b) { return b[1] - a[1]; });
+        data.queriedresources = [];
+        count = 0;
+        results_size = results.length;
+        resources_size = data.filteredresources.length;
+        for (i = 0; i < resources_size; i += 1) {
+            if (count > results_size) {
+                break;
+            }
+            for (j = 0; j < results_size; j += 1) {
+                if (data.filteredresources[i].name === results[j]) {
+                    data.queriedresources.push(data.filteredresources[i]);
+                    count += 1;
+                }
+            }
+        }
+        asyncMatcher = null;
+    });
+    asyncMatcher.start();
 }
 
 function fillCatalogFilters() {
@@ -105,7 +192,7 @@ function fillCatalogFilters() {
         html += '<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"  width="100%" id="table-' + tables[it][0] + '">';
         html += '<thead>';
         html += '<tr>';
-        html += '<th class="mdl-data-table__cell--non-numeric"> <a id="table-nm-' + tables[it][0] + '" style="cursor: pointer;" onclick="hideCatalogTable(\'' + tables[it][0] + '\')"><b>' + tables[it][0] + '</b><i class="material-icons">expand_more</i></a></th>';
+        html += '<th class="mdl-data-table__cell--non-numeric"> <a id="table-nm-' + tables[it][0] + '" style="cursor: pointer;" onclick="hideCatalogFilterTable(\'' + tables[it][0] + '\')"><b>' + tables[it][0] + '</b><i class="material-icons">expand_more</i></a></th>';
         html += '</tr>';
         html += '</thead>';
         html += '<tbody>';
@@ -121,8 +208,15 @@ function fillCatalogFilters() {
         html += '<br>';
     }
     // prepare the apply filters buton
-    html += '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="applyCatalogFilters()">';
+    html += '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="updateCatalog()">';
     html += 'Aplicar Filtros';
     html += '</button>';
     document.getElementById('filter-tables').innerHTML = html;
+}
+
+function updateCatalog() {
+    "use strict";
+    applyCatalogFilters();
+    applyCatalogQuery();
+    fillCatalogResources();
 }
