@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Introducing Lollipop, a sweet new take on agendae.">
+    <meta name="description" content="Sistena integrado de agendamento de recursos da UFRJ">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>Agendae</title>
 
@@ -77,8 +77,8 @@
             <form class="agendae-search-bar">
               <i class="material-icons">search</i>
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="sample3">
-                <label class="mdl-textfield__label" for="sample3">Busca...</label>
+                <input class="mdl-textfield__input" type="text" id="catalog-query" onchange="updateCatalog()">
+                <label class="mdl-textfield__label" for="catalog-query">Busca...</label>
               </div>
             </form>
           </div>
@@ -87,26 +87,21 @@
 
         <div class="mdl-grid">
           <div class="mdl-cell mdl-cell--3-col">
-            <div class="mdl-card mdl-shadow--2dp">
-              <div class="mdl-card__title agendae-filters">
-                <h2 class="mdl-card__title-text">Filtros</h2>
-              </div>
-              <div class="mdl-card__supporting-text" id="filter-tables">
-
-              </div>
-            </div>
+            <div id="filter-tables" style="text-align: center;"></div>
           </div>
           <div class="mdl-cell mdl-cell--9-col">
-
+            <div id="resources-grid" class="mdl-grid">
+            </div>
           </div>
         </div>
       </div>
     </div>
     <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <script src="javascript/utils.js"></script>
     <script src="javascript/fakeresources.js"></script>
     <script src="javascript/fakebackend.js"></script>
     <script>
-      fillFilters();
+      fillCatalogFilters();
     </script>
   </body>
 </html>
