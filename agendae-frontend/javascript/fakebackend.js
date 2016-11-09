@@ -9,7 +9,9 @@ var data = {
             categories: [],
             departments: [],
             statuses: []
-        }
+        },
+        resources: fakeresources,
+        filteredresources: filteredfakeresources
     };
 
 function doLogin() {
@@ -24,43 +26,46 @@ function doLogin() {
     return false;
 }
 
-function applyFilters() {
+function applyCatalogFilters() {
     "use strict";
     var tables = data.filtertables,
         it,
         jt,
+        res,
         elements;
+    data.filteredresources = [];
     // get checked filters
     for (it = 0; it < tables.length; it += 1) {
         elements = document.getElementsByClassName("table-el-" + tables[it]);
         for (jt = 0; jt < elements.length; jt += 1) {
-            if (elements[jt].className.indexOf("is-checked") > -1) {
+            if (elements[jt].className.indexOf("is-selected") > -1) {
                 if (it === 0) { // category
-                    data.filters.categories.push(document.getElementById("table-el-" + tables[it]).value);
+                    data.filters.categories.push(document.getElementById("table-el-" + tables[it] + "-" + String(jt)).innerText);
                 }
                 if (it === 1) { // departments
-                    data.filters.departments.push(document.getElementById("table-el-" + tables[it]).value);
+                    data.filters.departments.push(document.getElementById("table-el-" + tables[it] + "-" + String(jt)).innerText);
                 }
                 if (it === 2) { // statuses
-                    data.filters.statuses.push(document.getElementById("table-el-" + tables[it]).value);
+                    data.filters.statuses.push(document.getElementById("table-el-" + tables[it] + "-" + String(jt)).innerText);
                 }
             }
         }
     }
     // select final resources
-    for (it = 0; it < fakeresources.length; it += 1) {
+    for (it = 0; it < data.resources.length; it += 1) {
       // will select the resource if a filtered field is matched or the filtered field has no selected values
-        if (data.filters.categories.indexOf(fakeresources[it].category) !== -1 || data.filters.categories.length === 0) {
-            if (data.filters.departments.indexOf(fakeresources[it].department) !== -1 || data.filters.departments.length === 0) {
-                if (data.filters.statuses.indexOf(fakeresources[it].status) !== -1 || data.filters.statuses.length === 0) {
-                    filteredfakeresources.push(fakeresources[it]);
+        if (data.filters.categories.indexOf(data.resources[it].category) !== -1 || data.filters.categories.length === 0) {
+            if (data.filters.departments.indexOf(data.resources[it].department) !== -1 || data.filters.departments.length === 0) {
+                if (data.filters.statuses.indexOf(data.resources[it].status) !== -1 || data.filters.statuses.length === 0) {
+                    res = data.resources[it];
+                    data.filteredresources.push(res);
                 }
             }
         }
     }
 }
 
-function hideTable(table) {
+function hideCatalogTable(table) {
     "use strict";
     var i,
         elements = document.getElementsByClassName("table-el-" + table),
@@ -68,12 +73,12 @@ function hideTable(table) {
     for (i = 0; i < elements.length; i += 1) {
         elements[i].style.display = displayState;
     }
-    document.getElementById('table-nm-' + table).innerHTML = (displayState === "") ? table + '<i class="material-icons">expand_less</i>' : table + ' <i class="material-icons">expand_more</i>';
+    document.getElementById('table-nm-' + table).innerHTML = (displayState === "") ? '<b>' + table + '</b><i class="material-icons">expand_less</i>' : '<b>' + table + '</b><i class="material-icons">expand_more</i>';
 }
 
-function fillFilters() {
+function fillCatalogFilters() {
     "use strict";
-    var resources = fakeresources,
+    var resources = data.resources,
         html = "",
         categories = [data.filtertables[0]],
         departments = [data.filtertables[1]],
@@ -97,17 +102,17 @@ function fillFilters() {
     tables = [categories, departments, statuses];
     for (it = 0; it < tables.length; it += 1) {
         // set table head
-        html += '<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"  width="80%" id="table-' + tables[it][0] + '">';
+        html += '<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"  width="100%" id="table-' + tables[it][0] + '">';
         html += '<thead>';
         html += '<tr>';
-        html += '<th class="mdl-data-table__cell--non-numeric"> <a id="table-nm-' + tables[it][0] + '" style="cursor: pointer;" onclick="hideTable(\'' + tables[it][0] + '\')">' + tables[it][0] + '<i class="material-icons">expand_more</i></a></th>';
+        html += '<th class="mdl-data-table__cell--non-numeric"> <a id="table-nm-' + tables[it][0] + '" style="cursor: pointer;" onclick="hideCatalogTable(\'' + tables[it][0] + '\')"><b>' + tables[it][0] + '</b><i class="material-icons">expand_more</i></a></th>';
         html += '</tr>';
         html += '</thead>';
         html += '<tbody>';
         // set table values
         for (jt = 1; jt < tables[it].length; jt += 1) {
             html += '<tr class="table-el-' + tables[it][0] + '" style="display: none;">';
-            html += '<td id="table-el-' + tables[it][0] + '" class="mdl-data-table__cell--non-numeric">' + tables[it][jt] + '</td>';
+            html += '<td id="table-el-' + tables[it][0] + '-' + String(jt - 1) + '" class="mdl-data-table__cell--non-numeric">' + tables[it][jt] + '</td>';
             html += '</tr>';
         }
         // end table
@@ -115,5 +120,9 @@ function fillFilters() {
         html += '</table>';
         html += '<br>';
     }
+    // prepare the apply filters buton
+    html += '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="applyCatalogFilters()">';
+    html += 'Aplicar Filtros';
+    html += '</button>';
     document.getElementById('filter-tables').innerHTML = html;
 }
