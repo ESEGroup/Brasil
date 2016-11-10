@@ -216,11 +216,15 @@ function fillCatalogFilters() {
             statuses.push(resources[it].status);
         }
     }
+    // prepare the apply filters buton
+    html += '<div class="agendae-filters-btn"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="updateCatalog(\'filter\')">';
+    html += 'Aplicar Filtros';
+    html += '</button></div>';
     // create tables
     tables = [categories, departments, statuses];
     for (it = 0; it < tables.length; it += 1) {
         // set table head
-        html += '<table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"  width="100%" id="table-' + tables[it][0] + '">';
+        html += '<table class="agendae-filter-table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"  width="100%" id="table-' + tables[it][0] + '">';
         html += '<thead>';
         html += '<tr>';
         html += '<th class="mdl-data-table__cell--non-numeric"> <a id="table-nm-' + tables[it][0] + '" style="cursor: pointer;" onclick="hideCatalogFilterTable(\'' + tables[it][0] + '\')"><b>' + tables[it][0] + '</b><i class="material-icons">expand_more</i></a></th>';
@@ -238,10 +242,6 @@ function fillCatalogFilters() {
         html += '</table>';
         html += '<br>';
     }
-    // prepare the apply filters buton
-    html += '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="updateCatalog(\'filter\')">';
-    html += 'Aplicar Filtros';
-    html += '</button>';
     document.getElementById('filter-tables').innerHTML = html;
 }
 

@@ -77,6 +77,14 @@ a img{
   margin-left: 10px;
 }
 
+.agendae-filter-table {
+}
+
+.agendae-filters-btn {
+  padding-bottom: 30px;
+  padding-top: 10px;
+}
+
 .agendae-resource-box-title {
   color: #ff4081;
   letter-spacing: 2px;
