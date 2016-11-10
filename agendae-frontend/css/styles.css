@@ -62,6 +62,25 @@ a img{
   display: none !important;
 }
 
+.agendae-resource-box {
+  width: 40vh;
+  margin: 5px;
+  text-align: center;
+  padding-top: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.agendae-catalog-pagination {
+  text-align:center;
+  padding-bottom: 10px;
+  margin-left: 10px;
+}
+
+.agendae-resource-box-title {
+  color: #ff4081;
+  letter-spacing: 2px;
+}
 
 .agendae-logo-image {
   height: 28px;

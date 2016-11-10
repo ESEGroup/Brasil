@@ -77,7 +77,7 @@
             <form class="agendae-search-bar">
               <i class="material-icons">search</i>
               <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                <input class="mdl-textfield__input" type="text" id="catalog-query" onchange="updateCatalog()">
+                <input class="mdl-textfield__input" type="text" id="catalog-query" onchange="updateCatalog('')">
                 <label class="mdl-textfield__label" for="catalog-query">Busca...</label>
               </div>
             </form>
@@ -90,18 +90,23 @@
             <div id="filter-tables" style="text-align: center;"></div>
           </div>
           <div class="mdl-cell mdl-cell--9-col">
+            <div id="resources-pagination" class="mdl-grid">
+            </div>
             <div id="resources-grid" class="mdl-grid">
             </div>
           </div>
         </div>
       </div>
     </div>
+    <script>
+      var currentcatalogpageindex = 1;
+    </script>
     <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <script src="javascript/utils.js"></script>
     <script src="javascript/fakeresources.js"></script>
     <script src="javascript/fakebackend.js"></script>
     <script>
-      fillCatalogFilters();
+      startCatalog()
     </script>
   </body>
 </html>

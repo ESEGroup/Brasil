@@ -3,6 +3,7 @@
 /*global filteredfakeresources*/
 /*global Fts_fuzzy_match_async*/
 /*global fuzzy_match*/
+/*global currentcatalogpageindex:true*/
 /*jslint browser:true*/
 
 var data = {
@@ -36,7 +37,11 @@ function applyCatalogFilters() {
         jt,
         res,
         elements;
+    currentcatalogpageindex = 1;
     data.filteredresources = [];
+    data.filters.categories = [];
+    data.filters.departments = [];
+    data.filters.statuses = [];
     // get checked filters
     for (it = 0; it < tables.length; it += 1) {
         elements = document.getElementsByClassName("table-el-" + tables[it]);
@@ -82,39 +87,75 @@ function hideCatalogFilterTable(table) {
 function fillCatalogResources() {
     "use strict";
     var it,
-        html;
+        html = '',
+        gridresources = [],
+        firstresourceindex = 0,
+        pagesnumber = 1,
+        maxresourcesatpage = 6,
+        currentpagehtml = '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">#PAGENUMBER#</button>',
+        otherpagehtml = '<button class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(#PAGENUMBER#)">#PAGENUMBER#</button>',
+        statuscolor = '';
+    // calculated needed number of pages
+    pagesnumber = Math.ceil(data.queriedresources.length / maxresourcesatpage);
+    firstresourceindex = (currentcatalogpageindex - 1) * maxresourcesatpage;
+    gridresources = data.queriedresources.slice(firstresourceindex, firstresourceindex + maxresourcesatpage);
+    // prepare pagination
+    html += '<div class="agendae-catalog-pagination">';
+    html += '<span class="agendae-resource-box-title">Página: </span>';
+    for (it = 0; it < pagesnumber; it += 1) {
+        if (it + 1 === currentcatalogpageindex) {
+            html += currentpagehtml.replace("#PAGENUMBER#", String(it + 1)).replace("#PAGENUMBER#", String(it + 1));
+        } else {
+            html += otherpagehtml.replace("#PAGENUMBER#", String(it + 1)).replace("#PAGENUMBER#", String(it + 1));
+        }
+    }
+    html += '</div>';
+    document.getElementById('resources-pagination').innerHTML = html;
     html = "";
-    if (data.queriedresources.length === 0) {
-      //todo: embelezr essa mensagem
-        html += '<div class="mdl-card mdl-shadow--2dp">';
-        html += "[WIP] NENHUM RECURSO ENCONTRADO";
+    if (gridresources.length === 0) {
+        // prepare no resources found card
+        html += '<div class="agendae-noresource-box agendae-resource-box mdl-card mdl-shadow--2dp">';
+        html += '<div class="agendae-resource-box-title"><b>Nenhum recurso encontrado!</b></div><hr>';
+        html += '<div class="agendae-resource-box-text"><b><i class="material-icons">youtube_searched_for</i></b></br>';
+        html += 'Tente refinar sua busca para encontrar mais resultados.';
+        html += '</div>';
         html += '</div>';
     }
-    for (it = 0; it < data.queriedresources.length; it += 1) {
-        if (it % 3 === 0) {
-            html += '<div class="mdl-grid">';
+    for (it = 0; it < gridresources.length; it += 1) {
+        // prepare status text style
+        if (gridresources[it].status === "disponível") {
+            statuscolor = "green";
+        } else {
+            statuscolor = "red";
         }
-        html += '<div class="mdl-cell mdl-cell--4-col">';
-        html += '<div class="mdl-card mdl-shadow--2dp" style="width:100%">';
-        html += "[WIP] TESTE";
+        // prepare card html
+        html += '<div class="agendae-resource-box mdl-card mdl-shadow--2dp">';
+        html += '<div class="agendae-resource-box-title"><b>' + gridresources[it].name + '</b></div><hr>';
+        html += '<div class="agendae-resource-box-text">Pertence ao <b>' + gridresources[it].department + "</b>.</br>";
+        html += 'É da categoria <b>' + gridresources[it].category + '</b></br>';
+        html += 'Condição: <b style="color:' + statuscolor + ';">' + gridresources[it].status + '</b></br>';
+        html += '<small>(ID: ' + gridresources[it].id + ')</small>';
         html += '</div>';
+        html += '<button class="mdl-button mdl-js-button mdl-button--accent">';
+        html += 'DETALHES / AGENDAR';
+        html += '</button>';
         html += '</div>';
-        if (it % 3 === 2) {
-            html += "</div></br>";
-        }
     }
+    // apply changes
     document.getElementById('resources-grid').innerHTML = html;
+}
+
+function changeCatalogPage(id) {
+    "use strict";
+    currentcatalogpageindex = id;
+    fillCatalogResources();
 }
 
 function applyCatalogQuery() {
     "use strict";
-    var it,
-        resourcename,
-        pattern,
+    var pattern,
         patternField,
-        asyncMatcher,
-        filteredresourcesnames,
-        queriedresourcesnames;
+        asyncMatcher;
 
     patternField = document.getElementById('catalog-query');
     if (!patternField) {
@@ -127,33 +168,23 @@ function applyCatalogQuery() {
         return;
     }
 
-    filteredresourcesnames = [];
-    queriedresourcesnames = [];
-    for (it = 0; it < data.filteredresources.length; it += 1) {
-        resourcename = data.filteredresources.name;
-        filteredresourcesnames.push(resourcename);
-    }
-
     asyncMatcher = new Fts_fuzzy_match_async(fuzzy_match, pattern, data.filteredresources, function (results) {
         // Scored function requires sorting
         var i,
             j,
             count,
-            results_size,
-            resources_size;
-        results = results
-            .sort(function (a, b) { return b[1] - a[1]; });
+            results_size;
+        results = results.sort(function (a, b) { return b[1] - a[1]; });
         data.queriedresources = [];
         count = 0;
         results_size = results.length;
-        resources_size = data.filteredresources.length;
-        for (i = 0; i < resources_size; i += 1) {
+        for (i = 0; i < results_size; i += 1) {
             if (count > results_size) {
                 break;
             }
-            for (j = 0; j < results_size; j += 1) {
-                if (data.filteredresources[i].name === results[j]) {
-                    data.queriedresources.push(data.filteredresources[i]);
+            for (j = 0; j < data.filteredresources.length; j += 1) {
+                if (data.filteredresources[j].name === results[i][2]) {
+                    data.queriedresources.push(data.filteredresources[j]);
                     count += 1;
                 }
             }
@@ -208,15 +239,25 @@ function fillCatalogFilters() {
         html += '<br>';
     }
     // prepare the apply filters buton
-    html += '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="updateCatalog()">';
+    html += '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="updateCatalog(\'filter\')">';
     html += 'Aplicar Filtros';
     html += '</button>';
     document.getElementById('filter-tables').innerHTML = html;
 }
 
-function updateCatalog() {
+function updateCatalog(from) {
     "use strict";
-    applyCatalogFilters();
-    applyCatalogQuery();
+    if (from === "filter") {
+        applyCatalogFilters();
+    }
+    if (from !== "pagination") {
+        applyCatalogQuery();
+    }
     fillCatalogResources();
+}
+
+function startCatalog() {
+    "use strict";
+    fillCatalogFilters();
+    updateCatalog();
 }

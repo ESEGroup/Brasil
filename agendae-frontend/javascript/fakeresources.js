@@ -16,7 +16,7 @@ fakeresources = [
     category: "A",
   },
   {
-    name: "res7",
+    name: "res3",
     department : "dep1",
     id: 3,
     status: "disponível",
@@ -24,7 +24,7 @@ fakeresources = [
     category: "A",
   },
   {
-    name: "res6",
+    name: "res4",
     department : "dep1",
     id: 4,
     status: "disponível",
@@ -40,7 +40,7 @@ fakeresources = [
     category: "B",
   },
   {
-    name: "res4",
+    name: "res6",
     department : "dep1",
     id: 6,
     status: "disponível",
@@ -48,7 +48,7 @@ fakeresources = [
     category: "C",
   },
   {
-    name: "res3",
+    name: "res7",
     department : "dep4",
     id: 7,
     status: "disponível",
@@ -56,7 +56,7 @@ fakeresources = [
     category: "D",
   },
   {
-    name: "res1",
+    name: "res8",
     department : "dep4",
     id: 8,
     status: "disponível",
@@ -64,7 +64,7 @@ fakeresources = [
     category: "D",
   },
   {
-    name: "res1",
+    name: "res9",
     department : "dep4",
     id: 9,
     status: "disponível",
@@ -72,7 +72,7 @@ fakeresources = [
     category: "D",
   },
   {
-    name: "res1",
+    name: "res10",
     department : "dep4",
     id: 10,
     status: "disponível",
@@ -80,7 +80,7 @@ fakeresources = [
     category: "D",
   },
   {
-    name: "res1",
+    name: "res11",
     department : "dep4",
     id: 11,
     status: "disponível",
@@ -88,7 +88,7 @@ fakeresources = [
     category: "D",
   },
   {
-    name: "res1",
+    name: "res12",
     department : "dep4",
     id: 12,
     status: "disponível",
@@ -96,7 +96,7 @@ fakeresources = [
     category: "E",
   },
   {
-    name: "res1",
+    name: "res13",
     department : "dep4",
     id: 13,
     status: "disponível",
@@ -104,7 +104,7 @@ fakeresources = [
     category: "E",
   },
   {
-    name: "res1",
+    name: "res14",
     department : "dep2",
     id: 14,
     status: "disponível",
@@ -112,7 +112,7 @@ fakeresources = [
     category: "E",
   },
   {
-    name: "res1",
+    name: "res15",
     department : "dep3",
     id: 15,
     status: "disponível",
@@ -120,7 +120,7 @@ fakeresources = [
     category: "E",
   },
   {
-    name: "res1",
+    name: "res16",
     department : "dep3",
     id: 16,
     status: "disponível",
@@ -128,7 +128,7 @@ fakeresources = [
     category: "E",
   },
   {
-    name: "res1",
+    name: "res17",
     department : "dep3",
     id: 17,
     status: "disponível",
@@ -136,7 +136,7 @@ fakeresources = [
     category: "F",
   },
   {
-    name: "res1",
+    name: "res18",
     department : "dep3",
     id: 18,
     status: "disponível",
@@ -144,7 +144,7 @@ fakeresources = [
     category: "F",
   },
   {
-    name: "res1",
+    name: "res19",
     department : "dep2",
     id: 19,
     status: "disponível",
@@ -152,7 +152,7 @@ fakeresources = [
     category: "F",
   },
   {
-    name: "res1",
+    name: "res20",
     department : "dep2",
     id: 20,
     status: "disponível",
