@@ -1,7 +1,7 @@
 from django.db import models
 from app.models import Recurso, Usuario
 
-class Agendamento ():
+class Agendamento (models.Model):
     # no getters and setters please (http://dirtsimple.org/2004/12/python-is-not-java.html)
 
     usuario = models.ForeignKey(Usuario)
