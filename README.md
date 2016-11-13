@@ -8,6 +8,7 @@ sudo apt-get update
 sudo apt-get install python-django python-pip
 pip install django
 django-admin --version
+python manage.py runserver
 ```
 
 ##Guia MariaDB
