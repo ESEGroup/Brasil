@@ -16,4 +16,6 @@ django-admin --version
 sudo apt-get install python-pip python-dev mariadb-server libmysqlclient-dev 
 sudo mysql_secure_installation
 sudo pip install MySQL-python
+sudo pip install Django mysqlclient
+sudo pip freeze -l > requirements.txt
 ```
