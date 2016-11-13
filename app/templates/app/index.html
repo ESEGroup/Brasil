@@ -1,0 +1,122 @@
+{% load staticfiles %}
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Sistena integrado de agendamento de recursos da UFRJ">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Agendae</title>
+
+    <!-- Page styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.min.css">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+    #view-source {
+      position: fixed;
+      display: block;
+      right: 0;
+      bottom: 0;
+      margin-right: 40px;
+      margin-bottom: 40px;
+      z-index: 900;
+    }
+    </style>
+  </head>
+  <body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+
+      <div class="agendae-header mdl-layout__header mdl-layout__header--waterfall">
+        <div class="mdl-layout__header-row">
+          <span class="agendae-title mdl-layout-title">
+            <img class="agendae-logo-image" src="{% static 'images/agendae-logo-black-v1.png' %}">
+          </span>
+          <!-- Add spacer, to align navigation to the right in desktop -->
+          <div class="agendae-header-spacer mdl-layout-spacer"></div>
+          <div class="agendae-search-box mdl-textfield mdl-js-textfield mdl-textfield--expandable mdl-textfield--floating-label mdl-textfield--align-right mdl-textfield--full-width">
+            <!-- search bar
+            <label class="mdl-button mdl-js-button mdl-button--icon" for="search-field">
+              <i class="material-icons">search</i>
+            </label>
+          -->
+            <div class="mdl-textfield__expandable-holder">
+              <input class="mdl-textfield__input" type="text" id="search-field">
+            </div>
+          </div>
+          <!-- Navigation -->
+          <div class="agendae-navigation-container">
+            <nav class="agendae-navigation mdl-navigation">
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="login.html">ENTRAR</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="about.html">SOBRE</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="https://ufrj.br/">UFRJ</a>
+            </nav>
+          </div>
+
+          <span class="agendae-mobile-title mdl-layout-title">
+            <img class="agendae-logo-image" src="{% static 'images/agendae-logo-black-v1.png' %}">
+          </span>
+        </div>
+      </div>
+
+      <div class="agendae-drawer mdl-layout__drawer">
+        <span class="mdl-layout-title">
+          <img class="agendae-logo-image" src="{% static 'images/agendae-logo-black-v1.png' %}">
+        </span>
+        <nav class="mdl-navigation">
+          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="login.html">ENTRAR</a>
+          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="about.html">SOBRE</a>
+          <a class="mdl-navigation__link mdl-typography--text-uppercase" href="https://ufrj.br/">UFRJ</a>
+          <div class="agendae-drawer-separator"></div>
+          <span class="mdl-navigation__link" href="">Versão 0.0.1</span>
+          <span class="mdl-navigation__link" href="">Agendae &copy; 2016</span>
+        </nav>
+      </div>
+
+      <div class="agendae-content-login mdl-layout__content">
+        <div class="agendae-highligth-section mdl-typography--text-center">
+          <img src="{% static 'images/agendae-logo-white-v1.png' %}" class ="agendae-logo-highlight">
+          <div class="logo-font agendae-sub-slogan">Sistena integrado de agendamento de recursos da UFRJ</div>
+
+          <div class="login-card-wide mdl-card mdl-shadow--2dp">
+            <div class="mdl-card__supporting-text">
+      				<form action="#">
+      					<div class="mdl-textfield mdl-js-textfield">
+      						<input class="mdl-textfield__input" type="text" id="username" />
+      						<label class="mdl-textfield__label" for="username">Usuário</label>
+      					</div>
+      					<div class="mdl-textfield mdl-js-textfield">
+      						<input class="mdl-textfield__input" type="password" id="userpass" />
+      						<label class="mdl-textfield__label" for="userpass">Senha</label>
+      					</div>
+      				</form>
+      			</div>
+            <span style="color: red; display: none;" id="loginfail">
+              <small>Senha ou Usuário inválidos. Caso não se lembre das credênciais de acesso ou não possua cadastro, por favor entre em contato com o administrador de seu sistema.<small>
+            </span>
+            <div class="mdl-card__actions mdl-card--border">
+              <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" onclick="doLogin()">
+                Entrar
+              </a>
+            </div>
+          </div>
+
+        <footer class="agendae-footer agendae-disable-mobile mdl-mega-footer">
+
+          <div class="mdl-mega-footer--middle-section">
+            <p class="mdl-typography--font-light">O sistema Agendaê é um software que visa facilitar a gestão de recursos no ambiente universitário.
+              Esse sistema se propoẽ a ser uma plataforma onde funcionários podem agendar a utilização de recursos de uma instituição de maneira totalmente organizada,
+              registrada e monitorada pelos seus gestores. O Agendaê é uma solução para departamentos universitários que desejam otimizar a utilização de seus recursos.
+              </p>
+              <p class="mdl-typography--font-light">Agendae © 2016</p>
+          </div>
+
+        </footer>
+      </div>
+    </div>
+    <a href="https://github.com/ESEGroup/Brasil" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">Github</a>
+    <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+    <script src="{% static 'javascript/fakebackend.js' %}"></script>
+  </body>
+</html>

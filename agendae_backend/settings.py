@@ -68,8 +68,11 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'agendae_backend.wsgi.application'
+BASE = os.path.abspath(os.path.dirname(__name__))
+STATICFILES_DIRS = (os.path.join(BASE, "static"),)
+STATIC_URL = "/static/"
 
+WSGI_APPLICATION = 'agendae_backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
