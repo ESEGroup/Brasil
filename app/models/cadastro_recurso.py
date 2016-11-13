@@ -1,9 +1,11 @@
 from django.db import models
+from app.models import  Usuario, Recurso, Cadastro
 
-class Cadastro (models.Model):
-    # no getters and setters please (http://dirtsimple.org/2004/12/python-is-not-java.html)
+class CadastroRecurso(Cadastro):
 
-    acesso = None
+    notificador = None #NotificadorCadastro
+    recurso = None
+    solicitante = None
 
     def cadastrar ():
         return False
@@ -18,6 +20,5 @@ class Cadastro (models.Model):
         return False
 
     class Meta:
-        abstract = True
         managed = False
         app_label = 'app'

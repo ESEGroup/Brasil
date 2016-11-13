@@ -1,10 +1,9 @@
 from django.db import models
-from app.models import NotificadorAgendamento
 
 class GerenciadorAgendamento ():
 
     acesso = None
-    notificador = models.ForeignKey (NotificadorAgendamento)
+    notificador = None
 
     def dataUltimaChecagem ():
         return 0

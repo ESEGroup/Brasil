@@ -1,5 +1,5 @@
 from django.db import models
-from app.models import Recurso, Usuario
+#from app.models import Recurso, Usuario
 
 class Busca (models.Model):
 
