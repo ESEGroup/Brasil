@@ -42,7 +42,7 @@ class Recurso(models.Model):
         ('013', 'Equipamento de manutenção'),
         ('014', 'Outro equipamento'),
     )
-    estado = models.CharField(
+    categoria = models.CharField(
         max_length = 3,
         choices = CATEGORIA_CHOICES,
         default = '000',
