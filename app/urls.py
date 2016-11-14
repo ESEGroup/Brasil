@@ -9,7 +9,7 @@ urlpatterns = [
     url(r'people/$', views.people, name='people'),
     url(r'person/$', views.person, name='person'),
     url(r'catalog/$', views.catalog, name='catalog'),
-    url(r'catalog/(?P<id>[0-9]+)/$', views.resource, name='resource'),
+    url(r'catalog/(?P<id>-?[0-9]+)/$', views.resource, name='resource'),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

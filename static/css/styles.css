@@ -82,10 +82,7 @@ a img {
 .agendae-filter-table {
 }
 
-.agendae-filters-btn {
-  /*padding-bottom: 30px;
-  padding-top: 10px;*/
-}
+
 
 .agendae-resource-box-title {
     color: #ff4081;
@@ -728,7 +725,8 @@ img.article-image {
     display: -webkit-flex;
     display: flex;
     padding-left: 0.8vh;
-    height: 4vh;
+    align-items: center;
+    height: auto;
 }
 
 #dropdown-dep {
@@ -747,8 +745,11 @@ img.article-image {
 
 #none {
     -webkit-flex: 1;
-    flex: 1;
+    display:flex;
     margin-left: 1vh;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 1vh;
 }
 
 .resource-info-container .info {
@@ -782,7 +783,7 @@ img.article-image {
 }
 
 .mdl-js-textfield {
-    width: 30vh;
+    width: 25vh;
 }
 
 #resource-history-box {
@@ -807,7 +808,7 @@ img.article-image {
 
 #resource-info-container-buttons {
     margin: auto;
-    padding: 3vh;
+    padding: 3vh 3vh 0 3vh;
     display: flex;
     justify-content: space-between;
     width: 95%;
@@ -888,6 +889,10 @@ a {
 #text-resource-desc {
     height: 15vh;
     /*width:35vh;*/
+}
+
+#button-add{
+    
 }
 
 

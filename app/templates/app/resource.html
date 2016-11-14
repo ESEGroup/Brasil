@@ -11,13 +11,13 @@
         <div class="agendae-section-title"></div>
 
         <div id="resource-container" class="mdl-grid  mdl-cell--9-col">
-
+            
             <div id="card-info" class="agendae-resource-container mdl-card mdl-shadow--8dp">
-                <div style="display:flex; flex-direction: row; align-items: center">
+                <div id="title-resource" style="display:flex; flex-direction: row; align-items: center;padding: 2vh 0 2vh 0;">
+                    <div style="margin-left: -2vh;"><a href="javascript:window.history.go(-1)"><img src="{% static 'images/ic_arrow_back_black_24dp_2x.png' %}"></img></a></div> 
                     <h3 style="align-self: flex-start;" id="resourceName" class="mdl-cell mdl-cell--12-col mdl-typography--headline"></h3>
-
-                    
-                    <div style="margin-right: 3vh;"><a href="javascript:window.history.go(-1)"><b>Voltar</b></a></div>  
+                   
+                     
                     <button style="width: 30vh;" id="button-salvar"
                         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
                         style="" onclick="">Salvar alterações
@@ -27,7 +27,7 @@
                 </div>
                 
                 <div id="card-info-center">
-                    <div style="width:auto;padding-right: 2vh;">
+                    <div id="text-container" style="width:auto;padding-right: 2vh;">
 
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <input class="mdl-textfield__input normal-text" type="text" id="text-resource-name">
@@ -112,7 +112,7 @@
                 </div>
 
 
-                <div id="resource-info-container-buttons" style="">
+                <div id="resource-info-container-buttons" >
 
                     <button id="button-agendar"
                             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
@@ -126,9 +126,15 @@
                             class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
                             onclick="">Excluir recurso
                     </button>
-
-
                 </div>
+
+                <div id="button-cadastrar-recurso" style="display: none" >
+                     <button id="button-agendar" style=""
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                            onclick="">Cadastrar recurso
+                    </button>
+                </div>
+
 
 
             </div>
