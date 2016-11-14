@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.min.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block before %} {% endblock %}
     <style>
     #view-source {
       position: fixed;
@@ -48,8 +49,8 @@
           <!-- Navigation -->
           <div class="agendae-navigation-container">
             <nav class="agendae-navigation mdl-navigation">
-              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="login.html">ENTRAR</a>
-              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="about.html">SOBRE</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="{% url 'index' %}">ENTRAR</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" href="{% url 'about' %}">SOBRE</a>
               <a class="mdl-navigation__link mdl-typography--text-uppercase" href="https://ufrj.br/">UFRJ</a>
             </nav>
           </div>
@@ -90,7 +91,12 @@
     </div>
   </div>
   <a href="https://github.com/ESEGroup/Brasil" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast">Github</a>
+  {% block beforescripts %} {% endblock %}
   <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+  <script src="{% static 'javascript/jquery-3.1.1.min.js' %}"></script>
+  <script src="{% static 'javascript/utils.js' %}"></script>
+  <script src="{% static 'javascript/fakeresources.js' %}"></script>
   <script src="{% static 'javascript/fakebackend.js' %}"></script>
+  {% block afterscripts %} {% endblock %}
 </body>
 </html>

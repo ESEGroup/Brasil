@@ -7,22 +7,25 @@
 /*jslint browser:true*/
 
 var data = {
-        filtertables: ["Categorias", "Departamentos", "Disponibilidade"],
-        filters: {
-            categories: [],
-            departments: [],
-            statuses: []
-        },
-        resources: fakeresources,
-        filteredresources: filteredfakeresources,
-        queriedresources: filteredfakeresources
-    };
+    filtertables: ["Categorias", "Departamentos", "Disponibilidade"],
+    filters: {
+        categories: [],
+        departments: [],
+        statuses: []
+    },
+    resources: fakeresources,
+    filteredresources: filteredfakeresources,
+    queriedresources: filteredfakeresources
+};
+var categories,
+    departments,
+    statuses;
 
 function doLogin() {
     "use strict";
     if (document.getElementById('username').value === "admin") {
         if (document.getElementById('userpass').value === "admin") {
-            window.location = "catalog.html";
+            window.location = "catalog";
             return true;
         }
     }
@@ -34,7 +37,6 @@ function applyCatalogFilters() {
     "use strict";
     var tables = data.filtertables,
         it,
-        jt,
         res,
         elements;
     currentcatalogpageindex = 1;
@@ -43,25 +45,27 @@ function applyCatalogFilters() {
     data.filters.departments = [];
     data.filters.statuses = [];
     // get checked filters
-    for (it = 0; it < tables.length; it += 1) {
-        elements = document.getElementsByClassName("table-el-" + tables[it]);
-        for (jt = 0; jt < elements.length; jt += 1) {
-            if (elements[jt].className.indexOf("is-selected") > -1) {
-                if (it === 0) { // category
-                    data.filters.categories.push(document.getElementById("table-el-" + tables[it] + "-" + String(jt)).innerText);
-                }
-                if (it === 1) { // departments
-                    data.filters.departments.push(document.getElementById("table-el-" + tables[it] + "-" + String(jt)).innerText);
-                }
-                if (it === 2) { // statuses
-                    data.filters.statuses.push(document.getElementById("table-el-" + tables[it] + "-" + String(jt)).innerText);
-                }
-            }
+
+    for (it = 1; it < categories.length; it += 1) {
+        if (document.getElementById('cat-el-' + it).checked) {
+            data.filters.categories.push(categories[it]);
         }
     }
+
+    for (it = 1; it < departments.length; it += 1) {
+        if (document.getElementById('dep-el-' + it).checked) {
+            data.filters.departments.push(departments[it]);
+        }
+    }
+
+
+    // for (it = 1; it <= data.filtertables[2].length; it += 1) {
+    //
+    // }
+
     // select final resources
     for (it = 0; it < data.resources.length; it += 1) {
-      // will select the resource if a filtered field is matched or the filtered field has no selected values
+        // will select the resource if a filtered field is matched or the filtered field has no selected values
         if (data.filters.categories.indexOf(data.resources[it].category) !== -1 || data.filters.categories.length === 0) {
             if (data.filters.departments.indexOf(data.resources[it].department) !== -1 || data.filters.departments.length === 0) {
                 if (data.filters.statuses.indexOf(data.resources[it].status) !== -1 || data.filters.statuses.length === 0) {
@@ -71,84 +75,35 @@ function applyCatalogFilters() {
             }
         }
     }
-}
 
-function hideCatalogFilterTable(table) {
-    "use strict";
-    var i,
-        elements = document.getElementsByClassName("table-el-" + table),
-        displayState = (elements[0].style.display === "none") ? "" : "none";
-    for (i = 0; i < elements.length; i += 1) {
-        elements[i].style.display = displayState;
-    }
-    document.getElementById('table-nm-' + table).innerHTML = (displayState === "") ? '<b>' + table + '</b><i class="material-icons">expand_less</i>' : '<b>' + table + '</b><i class="material-icons">expand_more</i>';
-}
 
-function fillCatalogResources() {
-    "use strict";
-    var it,
-        html = '',
-        gridresources = [],
-        firstresourceindex = 0,
-        pagesnumber = 1,
-        maxresourcesatpage = 6,
-        currentpagehtml = '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">#PAGENUMBER#</button>',
-        otherpagehtml = '<button class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(#PAGENUMBER#)">#PAGENUMBER#</button>',
-        statuscolor = '';
-    // calculated needed number of pages
-    pagesnumber = Math.ceil(data.queriedresources.length / maxresourcesatpage);
-    firstresourceindex = (currentcatalogpageindex - 1) * maxresourcesatpage;
-    gridresources = data.queriedresources.slice(firstresourceindex, firstresourceindex + maxresourcesatpage);
-    // prepare pagination
-    html += '<div class="agendae-catalog-pagination">';
-    html += '<span class="agendae-resource-box-title">Página: </span>';
-    for (it = 0; it < pagesnumber; it += 1) {
-        if (it + 1 === currentcatalogpageindex) {
-            html += currentpagehtml.replace("#PAGENUMBER#", String(it + 1)).replace("#PAGENUMBER#", String(it + 1));
-        } else {
-            html += otherpagehtml.replace("#PAGENUMBER#", String(it + 1)).replace("#PAGENUMBER#", String(it + 1));
-        }
-    }
-    html += '</div>';
-    document.getElementById('resources-pagination').innerHTML = html;
-    html = "";
-    if (gridresources.length === 0) {
-        // prepare no resources found card
-        html += '<div class="agendae-noresource-box agendae-resource-box mdl-card mdl-shadow--2dp">';
-        html += '<div class="agendae-resource-box-title"><b>Nenhum recurso encontrado!</b></div><hr>';
-        html += '<div class="agendae-resource-box-text"><b><i class="material-icons">youtube_searched_for</i></b></br>';
-        html += 'Tente refinar sua busca para encontrar mais resultados.';
-        html += '</div>';
-        html += '</div>';
-    }
-    for (it = 0; it < gridresources.length; it += 1) {
-        // prepare status text style
-        if (gridresources[it].status === "disponível") {
-            statuscolor = "green";
-        } else {
-            statuscolor = "red";
-        }
-        // prepare card html
-        html += '<div class="agendae-resource-box mdl-card mdl-shadow--2dp">';
-        html += '<div class="agendae-resource-box-title"><b>' + gridresources[it].name + '</b></div><hr>';
-        html += '<div class="agendae-resource-box-text">Pertence ao <b>' + gridresources[it].department + "</b>.</br>";
-        html += 'É da categoria <b>' + gridresources[it].category + '</b></br>';
-        html += 'Condição: <b style="color:' + statuscolor + ';">' + gridresources[it].status + '</b></br>';
-        html += '<small>(ID: ' + gridresources[it].id + ')</small>';
-        html += '</div>';
-        html += '<button class="mdl-button mdl-js-button mdl-button--accent">';
-        html += 'DETALHES / AGENDAR';
-        html += '</button>';
-        html += '</div>';
-    }
-    // apply changes
-    document.getElementById('resources-grid').innerHTML = html;
 }
 
 function changeCatalogPage(id) {
     "use strict";
     currentcatalogpageindex = id;
-    fillCatalogResources();
+    fillTableResources();
+    normalizeNextPrevious(id);
+
+}
+
+function normalizeNextPrevious(id) {
+    var previous = document.getElementById('previous-button');
+    var next = document.getElementById('next-button');
+    previous.onclick = function () {
+        changeCatalogPage(id - 1)
+    };
+    next.onclick = function () {
+        changeCatalogPage(id + 1)
+    };
+
+    if (currentcatalogpageindex === 1) {
+        previous.onclick = '';
+    }
+
+    if (currentcatalogpageindex === pagesnumber) {
+        next.onclick = '';
+    }
 }
 
 function applyCatalogQuery() {
@@ -174,7 +129,9 @@ function applyCatalogQuery() {
             j,
             count,
             results_size;
-        results = results.sort(function (a, b) { return b[1] - a[1]; });
+        results = results.sort(function (a, b) {
+            return b[1] - a[1];
+        });
         data.queriedresources = [];
         count = 0;
         results_size = results.length;
@@ -195,15 +152,13 @@ function applyCatalogQuery() {
 }
 
 function fillCatalogFilters() {
-    "use strict";
+    // "use strict";
     var resources = data.resources,
         html = "",
-        categories = [data.filtertables[0]],
+        it;
+    categories = [data.filtertables[0]],
         departments = [data.filtertables[1]],
-        statuses = [data.filtertables[2]],
-        tables,
-        it,
-        jt;
+        statuses = [data.filtertables[2]];
     // get unique filter values
     for (it = 0; it < resources.length; it += 1) {
         if (categories.indexOf(resources[it].category) < 0) {
@@ -217,32 +172,34 @@ function fillCatalogFilters() {
         }
     }
     // prepare the apply filters buton
-    html += '<div class="agendae-filters-btn"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="updateCatalog(\'filter\')">';
-    html += 'Aplicar Filtros';
-    html += '</button></div>';
-    // create tables
-    tables = [categories, departments, statuses];
-    for (it = 0; it < tables.length; it += 1) {
-        // set table head
-        html += '<table class="agendae-filter-table mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp"  width="100%" id="table-' + tables[it][0] + '">';
-        html += '<thead>';
-        html += '<tr>';
-        html += '<th class="mdl-data-table__cell--non-numeric"> <a id="table-nm-' + tables[it][0] + '" style="cursor: pointer;" onclick="hideCatalogFilterTable(\'' + tables[it][0] + '\')"><b>' + tables[it][0] + '</b><i class="material-icons">expand_more</i></a></th>';
-        html += '</tr>';
-        html += '</thead>';
-        html += '<tbody>';
-        // set table values
-        for (jt = 1; jt < tables[it].length; jt += 1) {
-            html += '<tr class="table-el-' + tables[it][0] + '" style="display: none;">';
-            html += '<td id="table-el-' + tables[it][0] + '-' + String(jt - 1) + '" class="mdl-data-table__cell--non-numeric">' + tables[it][jt] + '</td>';
-            html += '</tr>';
-        }
-        // end table
-        html += '</tbody>';
-        html += '</table>';
-        html += '<br>';
+
+    for (it = 1; it < departments.length; it += 1) {
+
+        // html += '<li><div style="width:100%"> ';
+        // html += '<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="dep-el-' + it + '">';
+        // html += '<input type="checkbox" id="dep-el-' + it + '" name="dep-el-' + it + '" class="mdl-checkbox__input" >';
+        // html += '<span  class="mdl-checkbox__label">' + departments[it] + '</span>';
+        // html += '</label></div></li>';
+
+        html += '<li><input type="checkbox" id="dep-el-' + it + '" name="dep-el-' + it + '" class="mdl-checkbox__input"><label for="dep-el-' + it + '">';
+        html += departments[it];
+        html += '</label></li>';
+
+
     }
-    document.getElementById('filter-tables').innerHTML = html;
+    document.getElementById('ul-dropdown-dep').innerHTML = html;
+
+    html = '';
+    for (it = 1; it < categories.length; it += 1) {
+
+        html += '<li><input type="checkbox" id="cat-el-' + it + '" name="cat-el-' + it + '" class="mdl-checkbox__input"><label for="cat-el-' + it + '">';
+        html += categories[it];
+        html += '</label></li>';
+
+    }
+    document.getElementById('ul-dropdown-cat').innerHTML = html;
+
+
 }
 
 function updateCatalog(from) {
@@ -253,7 +210,7 @@ function updateCatalog(from) {
     if (from !== "pagination") {
         applyCatalogQuery();
     }
-    fillCatalogResources();
+    fillTableResources();
 }
 
 function startCatalog() {
@@ -261,3 +218,119 @@ function startCatalog() {
     fillCatalogFilters();
     updateCatalog();
 }
+
+
+function fillTableResources() {
+    "use strict";
+    var it,
+        html = '',
+        gridresources = [],
+        firstresourceindex = 0,
+        maxresourcesatpage = 10,
+        currentpagehtml = '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">#PAGENUMBER#</button>',
+        otherpagehtml = '<button class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(#PAGENUMBER#)">#PAGENUMBER#</button>',
+        previouspagehtml,
+        nextpagehtml,
+        statuscolor = '';
+    // calculated needed number of pages
+    pagesnumber = Math.ceil(data.queriedresources.length / maxresourcesatpage);
+    firstresourceindex = (currentcatalogpageindex - 1) * maxresourcesatpage;
+    gridresources = data.queriedresources.slice(firstresourceindex, firstresourceindex + maxresourcesatpage);
+    // prepare pagination
+    html += '<div class="agendae-catalog-pagination">';
+    // html += '<span class="agendae-resource-box-title">Página: </span>';
+    if (pagesnumber > 1) {
+        previouspagehtml = '<button id="previous-button" class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(1)">Anterior</button>';
+        nextpagehtml = '<button id="next-button" class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(2)">Próxima</button>';
+    } else {
+        previouspagehtml = '<button id="previous-button" class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(1)">Anterior</button>';
+        nextpagehtml = '<button id="next-button" class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(1)">Próxima</button>';
+    }
+    html += previouspagehtml;
+    for (it = 0; it < pagesnumber; it += 1) {
+        if (it + 1 === currentcatalogpageindex) {
+            html += currentpagehtml.replace("#PAGENUMBER#", String(it + 1)).replace("#PAGENUMBER#", String(it + 1));
+        } else {
+            html += otherpagehtml.replace("#PAGENUMBER#", String(it + 1)).replace("#PAGENUMBER#", String(it + 1));
+        }
+    }
+    html += nextpagehtml;
+    html += '</div>';
+
+
+    // html += '<div class="agendae-catalog-new">';
+    // html += '<a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" href=resource.html?-1>Novo recurso</a>';
+    // html += '</div>';
+
+    document.getElementById('resources-pagination').innerHTML = html;
+    html = "";
+
+
+    html += '<table class="resourceTable">';
+
+
+    if (gridresources.length === 0) {
+        // prepare no resources found card
+        html += '<div class="agendae-noresource-box agendae-resource-box mdl-card mdl-shadow--2dp">';
+        html += '<div class="agendae-resource-box-title"><b>Nenhum recurso encontrado!</b></div><hr>';
+        html += '<div class="agendae-resource-box-text"><b><i class="material-icons">youtube_searched_for</i></b></br>';
+        html += 'Tente refinar sua busca para encontrar mais resultados.';
+        html += '</div>';
+        html += '</div>';
+    } else {
+        html += '<tr>';
+        html += '<td>Nome</td>';
+        html += '<td>Localização</td>';
+        html += '<td>Código de Patrimônio</td>';
+        html += '<td>Categoria</td>';
+        html += '<td>Estado</td>';
+        html += '</tr>';
+
+        var count = 0;
+        for (it = 0; it < maxresourcesatpage; it += 1) {
+            // prepare status text style
+            if (count < gridresources.length) {
+                if (gridresources[it].status === "disponível") {
+                    statuscolor = "green";
+                } else if (gridresources[it].status === "manutenção") {
+                    statuscolor = "orange";
+                }
+                else {
+                    statuscolor = "red";
+                }
+                // prepare line
+                //
+
+                html += '<tr onclick=window.location.href="' + gridresources[it].id + '">';
+                html += '<td style="width:20%">' + gridresources[it].name + '</td>';
+                html += '<td style="width:30%">' + gridresources[it].department + "</td>";
+                html += '<td style="width:20%">' + gridresources[it].id + '</td>';
+                html += '<td style="width:20%">' + gridresources[it].category + '</td>';
+                html += '<td style="width:10%"><b style="color:' + statuscolor + ';">' + gridresources[it].status + '</b></td>';
+
+                html += '</tr>';
+
+                count += 1;
+            } else {
+                html += '<tr>';
+                html += '<td></td>';
+                html += '<td></td>';
+                html += '<td></td>';
+                html += '<td></td>';
+                html += '<td></td>';
+
+                html += '</tr>';
+            }
+
+        }
+    }
+
+
+    html += '</table>';
+
+    // apply changes
+    document.getElementById('resources-grid').innerHTML = html;
+
+
+}
+

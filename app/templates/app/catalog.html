@@ -1,0 +1,126 @@
+{% extends  "app/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="agendae-content mdl-layout__content">
+
+        <div class="mdl-grid">
+            <div class="agendae-section-title mdl-cell--2-col">
+                <!--<h3 class=" mdl-typography&#45;&#45;headline">Catálogo de recursos</h3>-->
+            </div>
+            <div class="mdl-cell--10-col">
+                <form class="agendae-search-bar">
+                    <i class="material-icons">search</i>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="catalog-query" onchange="updateCatalog('')">
+                        <label class="mdl-textfield__label" for="catalog-query">Busca...</label>
+                    </div>
+                </form>
+
+
+
+            </div>
+        </div>
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--2-col">
+                <div id="menu-catalog" style="min-width: 10vh; ">
+                    <a href="{% url 'catalog' %}"><div class="link-menu">Recursos</div></a>
+                    <hr>
+                    <a href="{% url 'people' %}"><div id="div-pessoas-admin" class="link-menu">Pessoas</div></a>
+
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--9-col">
+                <div id="filter-tables" style="">
+                    <div id="dropdown-dep" class="wrapper-dropdown-4">Localização
+                        <ul id="ul-dropdown-dep" class="dropdown">
+
+                        </ul>
+                    </div>
+
+                    <div id="dropdown-cat" class="wrapper-dropdown-4">Categorias
+                        <ul id="ul-dropdown-cat" class="dropdown">
+
+                        </ul>
+                    </div>
+
+                    <div id="none">
+                        <div class="agendae-filters-btn">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                                    onclick="updateCatalog('filter')">Aplicar Filtros
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="resources-grid" class="mdl-grid">
+                </div>
+                <div id="resources-pagination" class="mdl-grid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block beforescripts %} 
+<script>
+    var currentcatalogpageindex = 1,
+        pagesnumber = 1;
+
+
+
+</script>
+{% endblock %}
+
+{% block afterscripts %} 
+<script>
+
+    startCatalog();
+
+    function DropDown(el) {
+        this.dd = el;
+        this.opts = this.dd.find('ul.dropdown > li');
+        this.val = [];
+        this.index = [];
+        this.initEvents();
+    }
+    DropDown.prototype = {
+        initEvents: function () {
+            var obj = this;
+
+            obj.dd.on('click', function (event) {
+                $(this).toggleClass('active');
+                event.stopPropagation();
+            });
+
+            obj.opts.children('label').on('click', function (event) {
+                var opt = $(this).parent(),
+                        chbox = opt.children('input'),
+                        val = chbox.val(),
+                        idx = opt.index();
+
+                ($.inArray(val, obj.val) !== -1) ? obj.val.splice($.inArray(val, obj.val), 1) : obj.val.push(val);
+                ($.inArray(idx, obj.index) !== -1) ? obj.index.splice($.inArray(idx, obj.index), 1) : obj.index.push(idx);
+            });
+        },
+
+    };
+
+    new DropDown($('#dropdown-cat'));
+    new DropDown($('#dropdown-dep'));
+
+    $('.dropdown').click(function(e) {
+        e.stopPropagation();
+    });
+
+    $(document).click(function () {
+        // all dropdowns
+        $('.wrapper-dropdown-4').removeClass('active');
+    });
+
+
+</script>
+
+{% endblock %}

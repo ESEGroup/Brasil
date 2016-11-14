@@ -1,0 +1,155 @@
+{% extends  "app/base.html" %}
+{% load staticfiles %}
+
+{% block before %}
+<link rel="stylesheet" href="{% static 'css/kalendae.css' %}" type="text/css" charset="utf-8">
+{% endblock %}
+
+{% block content %}
+    <div class="agendae-content mdl-layout__content">
+
+        <div class="agendae-section-title"></div>
+
+        <div id="resource-container" class="mdl-grid  mdl-cell--9-col">
+
+            <div id="card-info" class="agendae-resource-container mdl-card mdl-shadow--8dp">
+                <div style="display:flex; flex-direction: row; align-items: center">
+                    <h3 style="align-self: flex-start;" id="resourceName" class="mdl-cell mdl-cell--12-col mdl-typography--headline"></h3>
+
+                    
+                    <div style="margin-right: 3vh;"><a href="javascript:window.history.go(-1)"><b>Voltar</b></a></div>  
+                    <button style="width: 30vh;" id="button-salvar"
+                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                        style="" onclick="">Salvar alterações
+                    </button>
+
+
+                </div>
+                
+                <div id="card-info-center">
+                    <div style="width:auto;padding-right: 2vh;">
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-name">
+                            <label class="mdl-textfield__label" for="text-resource-name">Nome do recurso</label>
+                        </div>
+                        <br>
+
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-location">
+                            <label class="mdl-textfield__label" for="text-resource-location">Localização</label>
+                        </div>
+                        <br>
+
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-id">
+                            <label class="mdl-textfield__label" for="text-resource-id">Código de patrimônio</label>
+                        </div>
+                        <br>
+
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-cat">
+                            <label class="mdl-textfield__label" for="text-resource-cat">Categoria</label>
+                        </div>
+                        <br>
+
+
+                        <div id="resource-desc" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                            <textarea class="mdl-textfield__input normal-text" type="text" rows="3"
+                                      id="text-resource-desc"></textarea>
+                            <label class="mdl-textfield__label" for="text-resource-desc">Descrição</label>
+                        </div>
+                        <br>
+
+                    </div>
+
+                    <div id="resource-schedule-box" class="mdl-cell mdl-cell--9-col">
+                        <b>Disponibilidade</b><br><br>
+                        <div style="display: flex; max-height: 22vh;">
+
+                            <div id="date-picker">
+
+                            </div>
+                            <div style="display: flex; flex-direction: column;margin-right: 2vh;">
+                                <h6 id="date-title" style="text-align: center"></h6>
+                                <div id="time-picker">
+
+                                </div>
+                                <button id="button-cancelar"
+                                        class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                                        style="" onclick="">Cancelar agendamentos
+                                </button>
+                            </div>
+
+
+
+                            <div style="display: flex; align-items: center; justify-content: center; width: 100%;padding-right: 5vh";>
+                                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="resource-availability"
+                                       style="width: auto;">
+                                    <input type="checkbox" id="resource-availability" class="mdl-switch__input switch-text-inside">
+                                    <span class="mdl-switch__label"><b>Agendamento</b></span>
+                                </label>
+
+                                
+
+                                
+                            </div>
+
+
+                        </div>
+
+
+                        <div id="resource-history-box">
+                            <b>Histórico de atividade</b><br><br>
+                            <div id="table-history"></div>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <div id="resource-info-container-buttons" style="">
+
+                    <button id="button-agendar"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                            onclick="">Agendar
+                    </button>
+                    <button id="button-agendar-outro"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                            onclick="">Agendar recurso para terceiros
+                    </button>
+                    <button id="button-excluir"
+                            class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                            onclick="">Excluir recurso
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+{% endblock %}
+
+{% block afterscripts %}
+
+<script src="{% static 'javascript/fakehistory.js' %}"></script>
+<script src="{% static 'javascript/fakeavailability.js' %}"></script>
+<script src="{% static 'javascript/fakeschedule.js' %}"></script>
+<script src="{% static 'javascript/resources.js' %}"></script>
+<script src="{% static 'javascript/kalendae.standalone.js' %}" type="text/javascript" charset="utf-8"></script>
+
+<script>
+
+    getResource({{ id }});
+
+
+</script>
+{% endblock %}
+

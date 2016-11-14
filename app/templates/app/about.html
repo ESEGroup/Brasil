@@ -1,0 +1,75 @@
+{% extends  "app/base.html" %}
+{% load staticfiles %}
+
+{% block content %} 
+      <div class="agendae-content mdl-layout__content">
+
+        <div class="mdl-grid about-max-width">
+
+            <div class="mdl-cell mdl-cell--12-col mdl-card mdl-shadow--4dp">
+                <div class="mdl-card__title">
+                    <h2 class="mdl-card__title-text"></h2>
+                </div>
+
+                <div class="about-article-image">
+                  <img class="article-image" src=" {% static 'images/agendae-logo-black-v1.png' %}" border="0" alt="">
+                </div>
+
+                <div class="mdl-grid about-copy">
+                    <h3 class="mdl-cell mdl-cell--12-col mdl-typography--headline">Introdução</h3>
+                    <div class="mdl-cell mdl-cell--12-col mdl-card__supporting-text no-padding ">
+                        <p>
+                          O sistema a ser desenvolvido é o Agendaê, um software que visa facilitar a gestão de recursos no ambiente universitário. Esse sistema se propoẽ a ser uma plataforma onde funcionários podem agendar a utilização de recursos de uma instituição de maneira totalmente organizada, registrada e monitorada pelos seus gestores. O Agendaê é uma solução para departamentos universitários que desejam otimizar a utilização de seus recursos.
+                          </p>
+                          <p>Ainda, o sistema conta com integração com o Consertaê, um sistema de manutenção preventiva feito também pensando em recursos no ambiente de uma instituição acadêmica. Em conjunto, esses dois sistemas objetivam garantir produtos sempre com boa qualidade e funcionando conforme suas especificações.
+                          </p>
+                    </div>
+
+                    <h3 class="mdl-cell mdl-cell--12-col mdl-typography--headline">Equipe</h3>
+                    <div class="mdl-cell mdl-cell--12-col mdl-card__supporting-text no-padding ">
+                        <p>
+                          A equipe de desenvolvimento do Agendae é constituída pelos alunos:
+                          <ul class="demo-list-item mdl-list">
+                            <li class="mdl-list__item">
+                              <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">person</i>
+                                Caio Ramos
+                              </span>
+                            </li>
+                            <li class="mdl-list__item">
+                              <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">person</i>
+                                Lucas Lopes
+                              </span>
+                            </li>
+                            <li class="mdl-list__item">
+                              <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">person</i>
+                                <a href="https://pboueke.github.io"> Pedro Boueke </a>
+                              </span>
+                            </li>
+                            <li class="mdl-list__item">
+                              <span class="mdl-list__item-primary-content">
+                                <i class="material-icons mdl-list__item-icon">person</i>
+                                Vinicius Alves
+                              </span>
+                            </li>
+                          </ul>
+                        </p>
+                    </div>
+
+                    <h3 class="mdl-cell mdl-cell--12-col mdl-typography--headline">Motivação</h3>
+                    <div class="mdl-cell mdl-cell--12-col mdl-card__supporting-text no-padding ">
+                        <p>
+                          O projeto Agendae é uma resposta ao projeto do curso de Engenharia de Software, da UFRJ, ministrado pelo professor Guilherme Horta Travassos, durante o segundo período de 2016.</p>
+                    </div>
+
+                    <div class="mdl-cell mdl-cell--12-col mdl-card__supporting-text no-padding ">
+                        <p style="text-align: center;">Agendae &copy; 2016</p>
+                    </div>
+
+                </div>
+            </div>
+      </div>
+    </div>
+{% endblock %}
