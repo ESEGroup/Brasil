@@ -75,10 +75,19 @@ function getResourceInfo(id) {
 
     //Availability
     //getAvailability
+    document.getElementById('resource-availability').onclick = function() { 
+        if (document.getElementById('resource-availability').checked){
+            document.getElementById('label-switch-agendamento').innerHTML='<b>Agendamento <font color="green">ON</font></b>';
+        } else {
+            document.getElementById('label-switch-agendamento').innerHTML='<b>Agendamento <font color="red">OFF</font></b>';
+        }
+    }
     if(fakeavailability.status === "ON"){
         document.getElementById('resource-availability').checked=true;
+        document.getElementById('label-switch-agendamento').innerHTML='<b>Agendamento <font color="green">ON</font></b>';
     } else {
         document.getElementById('resource-availability').checked=false;
+        document.getElementById('label-switch-agendamento').innerHTML='<b>Agendamento <font color="red">OFF</font></b>';
     }
 
 
