@@ -39,21 +39,32 @@
                         </ul>
                     </div>
 
-                    <div id="none">
+                    <div id="dropdown-stats" class="wrapper-dropdown-4">Estado
+                        <ul id="ul-dropdown-stats" class="dropdown">
+                        </ul>
+                    </div>
+
+
+
+
+                    <div class="none">
                         <div class="agendae-filters-btn">
                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
                                     onclick="changeFilters()">Aplicar Filtros
                             </button>
                         </div>
 
-                        <div>
+                        
+
+
+                    </div>
+
+                    <div>
                             <button id="button-add" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="window.location='newResource'">
                               <i class="material-icons">add</i>
                             </button>
                         </div>
 
-
-                    </div>
                 </div>
 
 
@@ -114,6 +125,7 @@
 
     new DropDown($('#dropdown-cat'));
     new DropDown($('#dropdown-dep'));
+    new DropDown($('#dropdown-stats'));
 
     $('.dropdown').click(function(e) {
         e.stopPropagation();
@@ -141,6 +153,12 @@
         for (it = 1; it < enderecos.length; it += 1) {
             if (document.getElementById('dep-el-' + it).checked) {
                 enderecosSelect.push('"'+enderecos[it]+'"');
+            }
+        }
+
+        for (it = 1; it < disponibilidades.length; it += 1) {
+            if (document.getElementById('stat-el-' + it).checked) {
+                disponibilidadesSelect.push('"'+disponibilidades[it]+'"');
             }
         }
         data = [texto,enderecosSelect,categoriasSelect,disponibilidadesSelect];
@@ -253,6 +271,14 @@
             html += '</label></li>';
         }
         document.getElementById('ul-dropdown-cat').innerHTML = html;
+
+        html = '';
+        for (it = 1; it < disponibilidades.length; it += 1) {
+            html += '<li><input type="checkbox" id="stat-el-' + it + '" name="stat-el-' + it + '" class="mdl-checkbox__input"><label for="stat-el-' + it + '">';
+            html += disponibilidades[it];
+            html += '</label></li>';
+        }
+        document.getElementById('ul-dropdown-stats').innerHTML = html;
     }
 
     function fillTableResources() {
@@ -318,6 +344,8 @@
             for (it = 0; it < maxresourcesatpage; it += 1) {
                 // prepare status text style
                 if (count < gridresources.length) {
+                    console.log(gridresources[it].estado);
+
                     if (gridresources[it].estado === "Disponível") {
                         statuscolor = "green";
                     } else if (gridresources[it].estado === "Em manutenção") {
@@ -331,8 +359,8 @@
                     html += '<td style="width:20%">' + gridresources[it].nome + '</td>';
                     html += '<td style="width:30%">' + gridresources[it].endereco + "</td>";
                     html += '<td style="width:20%">' + gridresources[it].patrimonio + '</td>';
-                    html += '<td style="width:20%">' + gridresources[it].categoria + '</td>';
-                    html += '<td style="width:10%"><b style="color:' + statuscolor + ';">' + gridresources[it].estado + '</b></td>';
+                    html += '<td style="width:15%">' + gridresources[it].categoria + '</td>';
+                    html += '<td style="width:15%"><b style="color:' + statuscolor + ';">' + gridresources[it].estado + '</b></td>';
                     html += '</tr>';
 
                     count += 1;

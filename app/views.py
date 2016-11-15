@@ -40,7 +40,7 @@ def searchCatalog(request):
         response_data = {}
         response_data['result'] = serializers.serialize('json', res)
         #print()
-        #print (s.params)
+        print (s.params)
         #print (response_data)
         return HttpResponse(
             json.dumps(response_data),
@@ -101,7 +101,55 @@ def createNewResource(request):
             rec.save()
 
             response_data = {}
-            response_data['result'] = patrimonio
+            response_data['result'] = patrimonio 
+            response_data['error'] = ""
+            #print()
+            #print (s.params)
+            #print (response_data)
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
+        else:
+            return HttpResponse(
+                json.dumps({"Info": "request method not supported"}),
+                content_type="application/json"
+            )
+
+def updateResource(request,patrimonio):
+        if request.method == 'GET':
+
+            nome = str(request.GET.get('nome'))
+            endereco = str(request.GET.get('endereco'))
+            categoria = str(request.GET.get('categoria'))
+            descricao = str(request.GET.get('descricao'))
+            estado = str(request.GET.get('estado'))
+
+            s = BuscaRecurso()
+            s.params = '{"type": "match", "id": ' + str(patrimonio) + '}'
+            print(s.params)
+            res = s.buscar()
+
+            if res == "DoesNotExist ERROR":
+                # if resource already exists..
+                response_data = {}
+                response_data['result'] = '""'
+                response_data['error'] = "Resource not found"
+                return HttpResponse(
+                    json.dumps(response_data),
+                    content_type="application/json"
+                )
+
+            # rec = Recurso(nome=nome, patrimonio=patrimonio, endereco=endereco, categoria=categoria, descricao=descricao)
+            res.nome=nome
+            res.endereco=endereco
+            res.categoria=categoria
+            res.descricao=descricao
+            res.estado=estado
+            res.save()
+
+            response_data = {}
+            response_data['result'] = patrimonio 
             response_data['error'] = ""
             #print()
             #print (s.params)
