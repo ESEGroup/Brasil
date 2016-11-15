@@ -24,6 +24,10 @@ a img {
     color: #fff;
 }
 
+.extrawide{
+    width:80% !important;
+}
+
 .sepia {
     -webkit-filter: sepia(50%);
     filter: sepia(50%);
@@ -892,7 +896,7 @@ a {
 }
 
 #button-add{
-    
+
 }
 
 

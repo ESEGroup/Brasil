@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse, Http404
-from app.models import BuscaRecurso
+from app.models import BuscaRecurso, Recurso
 from django.core import serializers
 import json
 
@@ -67,6 +67,54 @@ def resource(request, id):
     context = {'res': res}
     # do it
     return HttpResponse(template.render(context, request))
+
+def newResource(request):
+    template = loader.get_template('app/new_resource.html')
+    context = {}
+    return HttpResponse(template.render(context, request))
+
+def createNewResource(request):
+        if request.method == 'GET':
+
+            nome = str(request.GET.get('nome'))
+            patrimonio = str(request.GET.get('patrimonio'))
+            endereco = str(request.GET.get('endereco'))
+            categoria = str(request.GET.get('categoria'))
+            descricao = str(request.GET.get('descricao'))
+
+            s = BuscaRecurso()
+            s.params = '{"type": "match", "id": ' + str(patrimonio) + '}'
+            print(s.params)
+            res = s.buscar()
+
+            if res != "DoesNotExist ERROR":
+                # if resource already exists..
+                response_data = {}
+                response_data['result'] = '""'
+                response_data['error'] = "Resource already exists"
+                return HttpResponse(
+                    json.dumps(response_data),
+                    content_type="application/json"
+                )
+
+            rec = Recurso(nome=nome, patrimonio=patrimonio, endereco=endereco, categoria=categoria, descricao=descricao)
+            rec.save()
+
+            response_data = {}
+            response_data['result'] = patrimonio 
+            response_data['error'] = ""
+            #print()
+            #print (s.params)
+            #print (response_data)
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
+        else:
+            return HttpResponse(
+                json.dumps({"Info": "request method not supported"}),
+                content_type="application/json"
+            )
 
 def about(request):
     template = loader.get_template('app/about.html')
