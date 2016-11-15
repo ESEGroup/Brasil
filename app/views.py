@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse, Http404
 from app.models import BuscaRecurso
-
+from django.core import serializers
+import json
 
 def index(request):
     template = loader.get_template('app/index.html')
@@ -11,15 +12,49 @@ def index(request):
 
 def catalog(request):
     template = loader.get_template('app/catalog.html')
+
     context = {}
+    # do it
     return HttpResponse(template.render(context, request))
+
+    # ajax
+def searchCatalog(request):
+    if request.method == 'GET':
+        texto = str(request.GET.get('texto')) or ''
+        categorias = str(request.GET.get('categorias')) if str(request.GET.get('categorias')) != 'None' else '[]'
+        enderecos = str(request.GET.get('enderecos')) if str(request.GET.get('enderecos')) != 'None' else '[]'
+        disponibilidades = str(request.GET.get('disponibilidades')) if str(request.GET.get('disponibilidades')) != 'None' else '[]'
+        s = BuscaRecurso()
+        s.params = '{"type": "complex",'
+        s.params += '"texto": "' + texto + '",'
+        s.params += '"categorias": ' + categorias + ','
+        s.params += '"enderecos": ' + enderecos + ','
+        s.params += '"disponibilidades": ' + disponibilidades + ' }'
+        res = s.buscar()
+        if res == "DoesNotExist ERROR":
+            raise Http404("Nenhum recurso possui o número de patrimônio buscado!")
+
+        response_data = {}
+        response_data['result'] = serializers.serialize('json', res)
+        print()
+        print (s.params)
+        print (response_data)
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"Info": "request method not supported"}),
+            content_type="application/json"
+        )
 
 def resource(request, id):
     # prepare the layout
     template = loader.get_template('app/resource.html')
     # search
     s = BuscaRecurso()
-    s.params = '{"type": "match", "id": ' + id + '}'
+    s.params = '{"type": "match", "id": ' + str(id) + '}'
     res = s.buscar()
     # go to 404 if not found
     if res == "DoesNotExist ERROR":
