@@ -20,12 +20,7 @@ def catalog(request):
     # ajax
 def searchCatalog(request):
     if request.method == 'GET':
-        texto = str(request.GET.get('texto')) or ''
-
-        # categorias = str(request.GET.get('enderecos')) if str(request.GET.get('enderecos')) != 'None' else '[]'
-        # enderecos = str(request.GET.get('categorias')) if str(request.GET.get('categorias')) != 'None' else '[]'
-        # disponibilidades = str(request.GET.get('disponibilidades')) if str(request.GET.get('disponibilidades')) != 'None' else '[]'
-
+        texto = str(request.GET.get('texto'))
         categorias = request.GET.get('categorias')
         enderecos = request.GET.get('enderecos')
         disponibilidades = request.GET.get('disponibilidades')
@@ -104,7 +99,7 @@ def createNewResource(request):
             rec.save()
 
             response_data = {}
-            response_data['result'] = patrimonio 
+            response_data['result'] = patrimonio
             response_data['error'] = ""
             #print()
             #print (s.params)
