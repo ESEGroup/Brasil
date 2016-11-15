@@ -20,15 +20,11 @@ def catalog(request):
     # ajax
 def searchCatalog(request):
     if request.method == 'GET':
+
         texto = str(request.GET.get('texto')) or ''
-
-        # categorias = str(request.GET.get('enderecos')) if str(request.GET.get('enderecos')) != 'None' else '[]'
-        # enderecos = str(request.GET.get('categorias')) if str(request.GET.get('categorias')) != 'None' else '[]'
-        # disponibilidades = str(request.GET.get('disponibilidades')) if str(request.GET.get('disponibilidades')) != 'None' else '[]'
-
-        categorias = request.GET.get('categorias')
-        enderecos = request.GET.get('enderecos')
-        disponibilidades = request.GET.get('disponibilidades')
+        categorias = str(request.GET.get('categorias')) if str(request.GET.get('categorias')) != 'None' else '[]'
+        enderecos = str(request.GET.get('enderecos')) if str(request.GET.get('enderecos')) != 'None' else '[]'
+        disponibilidades = str(request.GET.get('disponibilidades')) if str(request.GET.get('disponibilidades')) != 'None' else '[]'
 
         s = BuscaRecurso()
         s.params = '{"type": "complex",'
@@ -37,14 +33,15 @@ def searchCatalog(request):
         s.params += '"enderecos": ' + enderecos + ','
         s.params += '"disponibilidades": ' + disponibilidades + ' }'
         res = s.buscar()
+
         if res == "DoesNotExist ERROR":
             raise Http404("Nenhum recurso possui o número de patrimônio buscado!")
 
         response_data = {}
         response_data['result'] = serializers.serialize('json', res)
-        print()
-        print (s.params)
-        print (response_data)
+        #print()
+        #print (s.params)
+        #print (response_data)
         return HttpResponse(
             json.dumps(response_data),
             content_type="application/json"

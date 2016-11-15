@@ -27,6 +27,8 @@
                             <input class="mdl-textfield__input normal-text" type="text" id="text-resource-name" width="80%">
                             <label class="mdl-textfield__label" for="text-resource-name">Nome do recurso</label>
                         </div>
+
+                        <p id='resource-name-null' style="color:red; display:none;"><br>* Esse campo não pode estar em branco</p>
                         <br>
 
 
@@ -34,6 +36,9 @@
                             <input class="mdl-textfield__input normal-text" type="text" id="text-resource-location" value="">
                             <label class="mdl-textfield__label" for="text-resource-location">Localização</label>
                         </div>
+
+                        <p id='resource-location-null' style="color:red; display:none;"><br>* Esse campo não pode estar em branco</p>
+
                         <br>
 
 
@@ -41,7 +46,10 @@
                             <input class="mdl-textfield__input normal-text" type="text" id="text-resource-id" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="">
                             <label class="mdl-textfield__label" for="text-resource-id">Código de patrimônio (numérico)</label>
                         </div>
-                        <p id='resource-id-warn' style="color:red; display:none;">* Já existe um recurso com esse número de patrimônio. Verifique se o valr inserido está correto ou entre em contato com o administrador do seu departamento</p>
+
+                        <p id='resource-id-warn' style="color:red; display:none;"><br>* Já existe um recurso com esse número de patrimônio. Verifique se o valr inserido está correto ou entre em contato com o administrador do seu departamento</p>
+                        <p id='resource-id-null' style="color:red; display:none;"><br>* Esse campo não pode estar em branco</p>
+
                         <br>
 
 
@@ -49,6 +57,9 @@
                             <input class="mdl-textfield__input normal-text" type="text" id="text-resource-cat">
                             <label class="mdl-textfield__label" for="text-resource-cat">Categoria</label>
                         </div>
+
+                        <p id='resource-id-null' style="color:red; display:none;"><br>* Esse campo não pode estar em branco</p>
+
                         <br>
 
 
@@ -84,11 +95,20 @@
 <script>
 // AJAX
 function createResource() {
+
+    nome = $('#text-resource-name').val()
+    if (nome == "") { $("#resource-name-null").css("display", "inline"); return;}
+    patrimonio = $('#text-resource-id').val()
+    if (patrimonio == "") { $("#resource-id-null").css("display", "inline"); return;}
+    endereco = $('#text-resource-location').val()
+    if (endereco == "") { $("#resource-location-null").css("display", "inline"); return;}
+
     $.ajax({
         url : "createNewResource/", // the endpoint
         method : "GET", // http method
         contentType: "application/x-www-form-urlencoded",
-        data : { nome : $('#text-resource-name').val(), endereco : $('#text-resource-location').val(), patrimonio : $('#text-resource-id').val(), categoria : $('#text-resource-cat').val(), descricao : $('#text-resource-desc').val() },
+
+        data : { nome : nome, endereco : endereco, patrimonio : patrimonio, categoria : $('#text-resource-cat').val(), descricao : $('#text-resource-desc').val() },
 
         // handle a successful response
         success : function(json) {

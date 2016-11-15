@@ -74,8 +74,8 @@
         queriedresources = [];
         filtertables = ['Localização', 'Categoria', 'Disponibilidade'];
     var texto="",
-        categorias=[], 
-        enderecos=[], 
+        categorias=[],
+        enderecos=[],
         disponibilidades = [];
     var data = [texto, categorias, enderecos, disponibilidades];
 </script>
@@ -147,7 +147,7 @@
     }
 
     function changeFilters() {
-        applyCatalogFilters(); 
+        applyCatalogFilters();
         getSearchResults();
     }
     // AJAX
@@ -175,7 +175,7 @@
                 }
                 console.log(queriedresources)
                 if(firstSearch){
-                    fillCatalogFilters() 
+                    fillCatalogFilters()
                 }
                 updateCatalog()
 
@@ -319,6 +319,7 @@
                 // prepare status text style
                 if (count < gridresources.length) {
                     console.log(gridresources[it].estado);
+
                     if (gridresources[it].estado === "Disponível") {
                         statuscolor = "green";
                     } else if (gridresources[it].estado === "Em manutenção") {
