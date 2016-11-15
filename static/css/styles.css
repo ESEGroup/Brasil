@@ -746,8 +746,14 @@ img.article-image {
     width: 20vh;
     margin-left: 1vh;
 }
+#dropdown-stats {
+    -webkit-flex: none;
+    flex: none;
+    width: 20vh;
+    margin-left: 1vh;
+}
 
-#none {
+.none {
     -webkit-flex: 1;
     display:flex;
     margin-left: 1vh;

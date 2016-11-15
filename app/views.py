@@ -40,7 +40,7 @@ def searchCatalog(request):
         response_data = {}
         response_data['result'] = serializers.serialize('json', res)
         #print()
-        #print (s.params)
+        print (s.params)
         #print (response_data)
         return HttpResponse(
             json.dumps(response_data),
@@ -141,11 +141,11 @@ def updateResource(request,patrimonio):
                 )
 
             # rec = Recurso(nome=nome, patrimonio=patrimonio, endereco=endereco, categoria=categoria, descricao=descricao)
-            res.nome = nome
-            res.endereco = endereco
-            res.categoria = categoria
-            res.descricao = descricao
-            res.estado = estado
+            res.nome=nome
+            res.endereco=endereco
+            res.categoria=categoria
+            res.descricao=descricao
+            res.estado=estado
             res.save()
 
             response_data = {}
