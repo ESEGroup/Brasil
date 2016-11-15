@@ -31,3 +31,25 @@
     </div>
 {% endblock %}
 
+{% block afterscripts %}
+<!--<script src="{% static 'javascript/getmdl-select.min.js' %}"></script>-->
+<script src="{% static 'javascript/fakehistory.js' %}"></script>
+<script src="{% static 'javascript/fakeavailability.js' %}"></script>
+<script src="{% static 'javascript/fakeschedule.js' %}"></script>
+<script src="{% static 'javascript/resources.js' %}"></script>
+<script src="{% static 'javascript/kalendae.standalone.js' %}" type="text/javascript" charset="utf-8"></script>
+
+<script>
+function doLogin() {
+    "use strict";
+    if (document.getElementById('username').value === "admin") {
+        if (document.getElementById('userpass').value === "admin") {
+            var newPath = window.location.origin + "/app/catalog/"
+            window.location = newPath;
+            return true;
+        }
+    }
+    document.getElementById('loginfail').style.display = "inline";
+    return false;
+}</script>
+{% endblock %}
