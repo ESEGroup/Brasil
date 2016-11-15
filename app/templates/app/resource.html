@@ -11,13 +11,13 @@
         <div class="agendae-section-title"></div>
 
         <div id="resource-container" class="mdl-grid  mdl-cell--9-col">
-            
+
             <div id="card-info" class="agendae-resource-container mdl-card mdl-shadow--8dp">
                 <div id="title-resource" style="display:flex; flex-direction: row; align-items: center;padding: 2vh 0 2vh 0;">
-                    <div style="margin-left: -2vh;"><a href="javascript:window.history.go(-1)"><img src="{% static 'images/ic_arrow_back_black_24dp_2x.png' %}"></img></a></div> 
+                    <div style="margin-left: -2vh;"><a href="javascript:window.history.go(-1)"><img src="{% static 'images/ic_arrow_back_black_24dp_2x.png' %}"></img></a></div>
                     <h3 style="align-self: flex-start;" id="resourceName" class="mdl-cell mdl-cell--12-col mdl-typography--headline"></h3>
-                   
-                     
+
+
                     <button style="width: 30vh;" id="button-salvar"
                         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
                         style="" onclick="">Salvar alterações
@@ -25,33 +25,33 @@
 
 
                 </div>
-                
+
                 <div id="card-info-center">
                     <div id="text-container" style="width:auto;padding-right: 2vh;">
 
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-name">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-name" value="{{ res.nome }}">
                             <label class="mdl-textfield__label" for="text-resource-name">Nome do recurso</label>
                         </div>
                         <br>
 
 
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-location">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-location" value="{{ res.endereco }}">
                             <label class="mdl-textfield__label" for="text-resource-location">Localização</label>
                         </div>
                         <br>
 
 
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-id">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-id" value="{{ res.patrimonio }}">
                             <label class="mdl-textfield__label" for="text-resource-id">Código de patrimônio</label>
                         </div>
                         <br>
 
 
                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-cat">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-cat" value="{{ res.categoria }}">
                             <label class="mdl-textfield__label" for="text-resource-cat">Categoria</label>
                         </div>
                         <br>
@@ -59,7 +59,7 @@
 
                         <div id="resource-desc" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <textarea class="mdl-textfield__input normal-text" type="text" rows="3"
-                                      id="text-resource-desc"></textarea>
+                                      id="text-resource-desc"> {{ res.descricao }} readonly=""</textarea>
                             <label class="mdl-textfield__label" for="text-resource-desc">Descrição</label>
                         </div>
                         <br>
@@ -93,9 +93,9 @@
                                     <span id="label-switch-agendamento" class="mdl-switch__label"></span>
                                 </label>
 
-                                
 
-                                
+
+
                             </div>
 
 
@@ -153,9 +153,8 @@
 
 <script>
 
-    getResource({{ id }});
+    //getResource({{ id }});
 
 
 </script>
 {% endblock %}
-
