@@ -47,7 +47,7 @@
                         </div>
 
                         <div>
-                            <button id="button-add" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="window.location=-1">
+                            <button id="button-add" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="window.location='newResource'">
                               <i class="material-icons">add</i>
                             </button>
                         </div>
@@ -318,9 +318,10 @@
             for (it = 0; it < maxresourcesatpage; it += 1) {
                 // prepare status text style
                 if (count < gridresources.length) {
-                    if (gridresources[it].status === "disponível") {
+                    console.log(gridresources[it].estado);
+                    if (gridresources[it].estado === "Disponível") {
                         statuscolor = "green";
-                    } else if (gridresources[it].status === "manutenção") {
+                    } else if (gridresources[it].estado === "Em manutenção") {
                         statuscolor = "orange";
                     }
                     else {
@@ -331,8 +332,8 @@
                     html += '<td style="width:20%">' + gridresources[it].nome + '</td>';
                     html += '<td style="width:30%">' + gridresources[it].endereco + "</td>";
                     html += '<td style="width:20%">' + gridresources[it].patrimonio + '</td>';
-                    html += '<td style="width:20%">' + gridresources[it].categoria + '</td>';
-                    html += '<td style="width:10%"><b style="color:' + statuscolor + ';">' + gridresources[it].estado + '</b></td>';
+                    html += '<td style="width:15%">' + gridresources[it].categoria + '</td>';
+                    html += '<td style="width:15%"><b style="color:' + statuscolor + ';">' + gridresources[it].estado + '</b></td>';
                     html += '</tr>';
 
                     count += 1;

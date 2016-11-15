@@ -20,7 +20,7 @@
 
                     <button style="width: 30vh;" id="button-salvar"
                         class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                        style="" onclick="">Salvar alterações
+                        style="" onclick="updateResource()">Salvar alterações
                     </button>
 
 
@@ -59,7 +59,7 @@
 
                         <div id="resource-desc" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
                             <textarea class="mdl-textfield__input normal-text" type="text" rows="3"
-                                      id="text-resource-desc"> {{ res.descricao }} readonly=""</textarea>
+                                      id="text-resource-desc"> {{ res.descricao }}</textarea>
                             <label class="mdl-textfield__label" for="text-resource-desc">Descrição</label>
                         </div>
                         <br>
@@ -86,12 +86,24 @@
 
 
 
-                            <div style="display: flex; align-items: center; justify-content: center; width: 100%;padding-right: 5vh";>
+                            <div style="display: flex; justify-content: center; width: 100%;padding-right: 5vh";>
+
+<!-- 
                                 <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="resource-availability"
                                        style="width: auto;">
                                     <input type="checkbox" id="resource-availability" class="mdl-switch__input switch-text-inside">
                                     <span id="label-switch-agendamento" class="mdl-switch__label"></span>
-                                </label>
+                                </label> -->
+
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select" style="width: 20vh; height: 25vh;">
+                                 <input class="mdl-textfield__input" value="" type="text" id="estado-dropdown" readonly tabIndex="-1" />
+                                   <label class="mdl-textfield__label" for="estado-dropdown">Estado</label>
+                                   <ul class="mdl-menu mdl-menu--bottom-left mdl-js-menu" for="estado-dropdown" style="width: 20vh">
+                                     <li class="mdl-menu__item" onclick="changeStatus('Disponível')">Disponível</li>
+                                     <li class="mdl-menu__item" onclick="changeStatus('Em manutenção')">Em manutenção</li>
+                                     <li class="mdl-menu__item" onclick="changeStatus('Indisponível')">Indisponível</li>
+                                   </ul>
+                               </div>
 
 
 
@@ -145,9 +157,75 @@
 
 {% block afterscripts %}
 
-<script src="{% static 'javascript/fakehistory.js' %}"></script>
-<script src="{% static 'javascript/fakeavailability.js' %}"></script>
-<script src="{% static 'javascript/fakeschedule.js' %}"></script>
-<script src="{% static 'javascript/resources.js' %}"></script>
 <script src="{% static 'javascript/kalendae.standalone.js' %}" type="text/javascript" charset="utf-8"></script>
+<script>
+
+    new Kalendae('date-picker', {
+        months: 1,
+        mode: 'single',
+        selected: Kalendae.moment(),
+        subscribe: {
+            'change': function (date) {
+                //getDateSchedules
+                console.log(date, this.getSelected());
+                document.getElementById('date-title').innerHTML = '<b>'+this.getSelected()+'</b>';
+                // fillTableSchedule(this.getSelected());
+            }
+        }
+    });
+
+    
+    document.getElementById('estado-dropdown').value = "{{ res.estado }}";
+    function changeStatus(estado){
+        document.getElementById('estado-dropdown').value = estado;
+
+    }
+    // document.getElementById('resource-availability').onclick = function() { 
+    //     if (document.getElementById('resource-availability').checked){
+    //         document.getElementById('label-switch-agendamento').innerHTML='<b>Agendamento <font color="green">ON</font></b>';
+    //     } else {
+    //         document.getElementById('label-switch-agendamento').innerHTML='<b>Agendamento <font color="red">OFF</font></b>';
+    //     }
+    // }
+    // if("" === "Disponível"){
+    //     document.getElementById('resource-availability').checked=true;
+    //     document.getElementById('label-switch-agendamento').innerHTML='<b>Agendamento <font color="green">ON</font></b>';
+    // } else {
+    //     document.getElementById('resource-availability').checked=false;
+    //     document.getElementById('label-switch-agendamento').innerHTML='<b>Agendamento <font color="red">OFF</font></b>';
+    // }
+
+
+
+
+    // AJAX
+function updateResource() {
+    $.ajax({
+        url : "updateResource/", // the endpoint
+        method : "GET", // http method
+        contentType: "application/x-www-form-urlencoded",
+        data : { nome : $('#text-resource-name').val(), endereco : $('#text-resource-location').val(), patrimonio : $('#text-resource-id').val(), categoria : $('#text-resource-cat').val(), descricao : $('#text-resource-desc').val() , estado : $('#estado-dropdown').val() },
+
+        // handle a successful response
+        success : function(json) {
+            console.log("================")
+            console.log(json); // log the returned json to the console
+            if (json.error != "") {
+              $("#resource-id-warn").css("display", "inline");
+              return
+            }
+            // var newPath = window.location.origin + "/app/catalog/" + json.result;
+            var newPath = window.location.origin + "/app/catalog/";
+            window.location = newPath;
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $("#error-warn").css("display", "inline");
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+
+</script>
 {% endblock %}
