@@ -11,7 +11,7 @@
             <div class="mdl-cell--10-col">
                     <i class="material-icons">search</i>
                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-                        <input class="mdl-textfield__input" type="text" id="catalog-query" onchange="getSearchResults()">
+                        <input class="mdl-textfield__input" type="text" id="catalog-query" onchange="changeFilters()">
                         <label class="mdl-textfield__label" for="catalog-query">Busca...</label>
                     </div>
             </div>
@@ -42,7 +42,7 @@
                     <div id="none">
                         <div class="agendae-filters-btn">
                             <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
-                                    onclick="getSearchResults()">Aplicar Filtros
+                                    onclick="changeFilters()">Aplicar Filtros
                             </button>
                         </div>
 
@@ -72,7 +72,12 @@
     var currentcatalogpageindex = 1,
         pagesnumber = 1,
         queriedresources = [];
-        filtertables = ['Localização', 'Categoria', 'Disponibilidade']
+        filtertables = ['Localização', 'Categoria', 'Disponibilidade'];
+    var texto="",
+        categorias=[], 
+        enderecos=[], 
+        disponibilidades = [];
+    var data = [texto, categorias, enderecos, disponibilidades];
 </script>
 {% endblock %} {% block afterscripts %}
 <script>
@@ -119,13 +124,44 @@
         $('.wrapper-dropdown-4').removeClass('active');
     });
 
+    function applyCatalogFilters(){
+        var texto,
+            enderecosSelect = [],
+            categoriasSelect = [],
+            disponibilidadesSelect=[];
+
+        texto = $('#catalog-query').val();
+
+        for (it = 1; it < categorias.length; it += 1) {
+            if (document.getElementById('cat-el-' + it).checked) {
+                categoriasSelect.push('"'+categorias[it]+'"');
+            }
+        }
+
+        for (it = 1; it < enderecos.length; it += 1) {
+            if (document.getElementById('dep-el-' + it).checked) {
+                enderecosSelect.push('"'+enderecos[it]+'"');
+            }
+        }
+        data = [texto,enderecosSelect,categoriasSelect,disponibilidadesSelect];
+    }
+
+    function changeFilters() {
+        applyCatalogFilters(); 
+        getSearchResults();
+    }
     // AJAX
-    function getSearchResults() {
+    function getSearchResults(firstSearch) {
+        console.log("Busca: " );
+        console.log("texto: " + data[0]);
+        console.log("enderecos: " + data[1]);
+        console.log("categorias: " + data[2]);
+        console.log("disponibilidades: " + data[3]);
         $.ajax({
             url : "searchCatalog/", // the endpoint
             method : "GET", // http method
             contentType: "application/x-www-form-urlencoded",
-            data : { texto : $('#catalog-query').val() }, // data sent with the post request
+            data : { 'texto' : data[0], 'enderecos' : '['+ data[1] +']', 'categorias' : '['+ data[2] +']', 'disponibilidades' : '['+ data[3] +']' }, // data sent with the post request
 
             // handle a successful response
             success : function(json) {
@@ -138,7 +174,11 @@
                   queriedresources.push(obj);
                 }
                 console.log(queriedresources)
+                if(firstSearch){
+                    fillCatalogFilters() 
+                }
                 updateCatalog()
+
                 console.log("success"); // another sanity check
             },
 
@@ -146,6 +186,7 @@
             error : function(xhr,errmsg,err) {
                 console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
             }
+
         });
     };
 
@@ -180,33 +221,35 @@
         var resources = queriedresources,
             html = "",
             it;
-            categories = [filtertables[0]],
-            departments = [filtertables[1]],
-            statuses = [filtertables[2]];
+
+            categorias = [filtertables[0]],
+            enderecos = [filtertables[1]],
+            disponibilidades = [filtertables[2]];
         // get unique filter values
+
         for (it = 0; it < resources.length; it += 1) {
-            if (categories.indexOf(resources[it].category) < 0) {
-                categories.push(resources[it].category);
+            if (categorias.indexOf(resources[it].categoria) < 0) {
+                categorias.push(resources[it].categoria);
             }
-            if (departments.indexOf(resources[it].department) < 0) {
-                departments.push(resources[it].department);
+            if (enderecos.indexOf(resources[it].endereco) < 0) {
+                enderecos.push(resources[it].endereco);
             }
-            if (statuses.indexOf(resources[it].status) < 0) {
-                statuses.push(resources[it].status);
+            if (disponibilidades.indexOf(resources[it].estado) < 0) {
+                disponibilidades.push(resources[it].estado);
             }
         }
         // prepare the apply filters buton
-        for (it = 1; it < departments.length; it += 1) {
+        for (it = 1; it < enderecos.length; it += 1) {
             html += '<li><input type="checkbox" id="dep-el-' + it + '" name="dep-el-' + it + '" class="mdl-checkbox__input"><label for="dep-el-' + it + '">';
-            html += departments[it];
+            html += enderecos[it];
             html += '</label></li>';
 
         }
         document.getElementById('ul-dropdown-dep').innerHTML = html;
         html = '';
-        for (it = 1; it < categories.length; it += 1) {
+        for (it = 1; it < categorias.length; it += 1) {
             html += '<li><input type="checkbox" id="cat-el-' + it + '" name="cat-el-' + it + '" class="mdl-checkbox__input"><label for="cat-el-' + it + '">';
-            html += categories[it];
+            html += categorias[it];
             html += '</label></li>';
         }
         document.getElementById('ul-dropdown-cat').innerHTML = html;
@@ -311,12 +354,12 @@
 
     function updateCatalog() {
         'use strict';
-        fillCatalogFilters()
+        // fillCatalogFilters()
         fillTableResources()
     }
 
     //START!
-    getSearchResults()
+    getSearchResults(true);
 </script>
 
 {% endblock %}
