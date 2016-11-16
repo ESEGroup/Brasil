@@ -1,31 +1,55 @@
 # Brasil - Agendae
-Repositório do projeto do grupo Brasil
 
-É necessário ter instalado python3 e django, em suas versões mais recentes (15/11/2016)
 
-Use o comando 'python manage.py runserver', na raiz do projeto, para iniciar o servidor. Acesse a aplicação pelo endereço http://127.0.0.1:8000/app/ e realize e preencha os campos "usuário" e "senha" com 'admin' e 'admin'
+## Sobre o projeto
 
-##Guia Django
+O projeto Agendaê é um sistema de agendamento de recursos acadêmicos desenvolvido no contexto da matédia de Engenharia de Software  *(EEL873)*, ministrada pelo professor Guilherme Horta Travassos na Universidade Federal do Rio de Janeiro em 2016.2.
 
+Ao longo do curso foram levantados diversos requisitos e estabelecidas inumeras restrições e alterações. Todo essetrabalho culminou no conteúdo desse repositório, que em sua totalidade contém a implementação prática do projeto suas minúcias de especificação na aba Wiki.
+
+## Como utilizar
+
+### Requisitos Técnicos
+
+As seguintes tecnologias são necessárias para o bom funcionamento do sistema:
+
+- Python 3
+- Django 1.10.3
+
+Todas as outras dependências e bibliotecas externas já estão acopladas nesse repositório e não necessitam de maior atenção do usuário. O sistema de base de dados utilizado foi o `sqlite3` fornecido pelo próprio Django.
+
+#### Instalação do Django
+
+Para usuários do sistema operacional Linux, basta digitar os comandos a seguir no terminal de controle.
+
+```
 sudo apt-get update
-
 sudo apt-get install python-django python-pip
-
 pip install django
-
 django-admin --version
-
 python manage.py runserver
 
-##Guia MariaDB
+```
 
-sudo apt-get install python-pip python-dev mariadb-server libmysqlclient-dev
+### Inicializando o sistema
 
-sudo mysql_secure_installation
+Efetue os seguintes passos:
 
-sudo pip install MySQL-python
+- Faça download o clone o repositório para um diretório dentro de sua preferência. Em caso de download do arquivo .zip não se esqueça de extrair os aqruivos.
+- Utillizando o terminal, navegue até o diretório que você extraiu esse repositório e digite o seguinte comando:
 
-sudo pip install Django mysqlclient
+```
+python manage.py runserver
+```
 
-sudo pip freeze -l > requirements.txt
+- Acesse a aplicação em `http://127.0.0.1:8000/app/` ou `localhost:8000/app/`
+- Utilize o usuário **admin** e a senha **admin** para se autenticar no sistema.
 
+
+
+## Responsáveis
+
+- [Caio Riqueza](https://github.com/caiocrr)
+- [Lucas Rolim](https://github.com/lucaslrolim)
+- [Pedro Boueke](https://github.com/pboueke)
+- [Vinícius Alves](https://github.com/vinicius-alves)
