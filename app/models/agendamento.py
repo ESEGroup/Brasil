@@ -10,14 +10,14 @@ class Agendamento (models.Model):
     periodo = models.PositiveIntegerField() #seconds
     # state choices:
     ESTADO_CHOICES = (
-        ('AG', 'Agendado'),
-        ('CA', 'Cancelado'),
-        ('CF', 'Confirmado'),
+        ('Agendado', 'Agendado'),
+        ('Cancelado', 'Cancelado'),
+        ('Confirmado', 'Confirmado'),
     )
     estado = models.CharField(
-        max_length = 2,
+        max_length = 12,
         choices = ESTADO_CHOICES,
-        default = 'AG',
+        default = 'Agendado',
     )
 
     class Meta:
