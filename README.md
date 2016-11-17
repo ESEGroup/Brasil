@@ -24,8 +24,8 @@ Para usuários do sistema operacional Linux, basta digitar os comandos a seguir 
 
 ```
 sudo apt-get update
-sudo apt-get install python-django python-pip
-pip install django
+sudo apt-get install python-django python-pip3
+pip3 install django djangorestframework
 django-admin --version
 python manage.py runserver
 
