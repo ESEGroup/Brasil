@@ -27,7 +27,7 @@ sudo apt-get update
 sudo apt-get install python-django python-pip3
 pip3 install django djangorestframework
 django-admin --version
-python manage.py runserver
+python3 manage.py runserver
 
 ```
 
