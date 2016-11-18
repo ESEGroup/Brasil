@@ -1,0 +1,393 @@
+{% extends  "app/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="agendae-content mdl-layout__content">
+
+        <div class="mdl-grid">
+            <div class="agendae-section-title mdl-cell--2-col">
+                <!--<h3 class=" mdl-typography&#45;&#45;headline">Catálogo de recursos</h3>-->
+            </div>
+            <div class="mdl-cell--10-col">
+                    <i class="material-icons">search</i>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                        <input class="mdl-textfield__input" type="text" id="catalog-query" onchange="changeFilters()">
+                        <label class="mdl-textfield__label" for="catalog-query">Busca...</label>
+                    </div>
+            </div>
+        </div>
+        <div class="mdl-grid">
+            <div class="mdl-cell mdl-cell--2-col">
+                <div id="menu-catalog" style="min-width: 10vh; ">
+                    <a href="{% url 'catalog' %}"><div class="link-menu">Recursos</div></a>
+                    <hr>
+                    <a href="{% url 'people' %}"><div id="div-pessoas-admin" class="link-menu">Pessoas</div></a>
+
+                </div>
+            </div>
+            <div class="mdl-cell mdl-cell--9-col">
+                <div id="filter-tables" style="">
+                    <div id="dropdown-dep" class="wrapper-dropdown-4">Localização
+                        <ul id="ul-dropdown-dep" class="dropdown">
+
+                        </ul>
+                    </div>
+
+                    <div id="dropdown-cat" class="wrapper-dropdown-4">Categorias
+                        <ul id="ul-dropdown-cat" class="dropdown">
+
+                        </ul>
+                    </div>
+
+                    <div id="dropdown-stats" class="wrapper-dropdown-4">Estado
+                        <ul id="ul-dropdown-stats" class="dropdown">
+                        </ul>
+                    </div>
+
+
+
+
+                    <div class="none">
+                        <div class="agendae-filters-btn">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                                    onclick="changeFilters()">Aplicar Filtros
+                            </button>
+                        </div>
+
+                        
+
+
+                    </div>
+
+                    <div>
+                            <button id="button-add" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="window.location='newResource'">
+                              <i class="material-icons">add</i>
+                            </button>
+                        </div>
+
+                </div>
+
+
+                <div id="resources-grid" class="mdl-grid">
+                </div>
+                <div id="resources-pagination" class="mdl-grid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block beforescripts %}
+<script>
+    var currentcatalogpageindex = 1,
+        pagesnumber = 1,
+        queriedresources = [];
+        filtertables = ['Localização', 'Categoria', 'Disponibilidade'];
+    var texto="",
+        categorias=[],
+        enderecos=[],
+        disponibilidades = [];
+    var data = [texto, categorias, enderecos, disponibilidades];
+</script>
+{% endblock %} {% block afterscripts %}
+<script>
+
+    //startCatalog();
+
+    function DropDown(el) {
+        this.dd = el;
+        this.opts = this.dd.find('ul.dropdown > li');
+        this.val = [];
+        this.index = [];
+        this.initEvents();
+    }
+    DropDown.prototype = {
+        initEvents: function () {
+            var obj = this;
+
+            obj.dd.on('click', function (event) {
+                $(this).toggleClass('active');
+                event.stopPropagation();
+            });
+
+            obj.opts.children('label').on('click', function (event) {
+                var opt = $(this).parent(),
+                        chbox = opt.children('input'),
+                        val = chbox.val(),
+                        idx = opt.index();
+
+                ($.inArray(val, obj.val) !== -1) ? obj.val.splice($.inArray(val, obj.val), 1) : obj.val.push(val);
+                ($.inArray(idx, obj.index) !== -1) ? obj.index.splice($.inArray(idx, obj.index), 1) : obj.index.push(idx);
+            });
+        },
+    };
+
+    new DropDown($('#dropdown-cat'));
+    new DropDown($('#dropdown-dep'));
+    new DropDown($('#dropdown-stats'));
+
+    $('.dropdown').click(function(e) {
+        e.stopPropagation();
+    });
+
+    $(document).click(function () {
+        // all dropdowns
+        $('.wrapper-dropdown-4').removeClass('active');
+    });
+
+    function applyCatalogFilters(){
+        var texto,
+            enderecosSelect = [],
+            categoriasSelect = [],
+            disponibilidadesSelect=[];
+
+        texto = $('#catalog-query').val();
+
+        for (it = 1; it < categorias.length; it += 1) {
+            if (document.getElementById('cat-el-' + it).checked) {
+                categoriasSelect.push('"'+categorias[it]+'"');
+            }
+        }
+
+        for (it = 1; it < enderecos.length; it += 1) {
+            if (document.getElementById('dep-el-' + it).checked) {
+                enderecosSelect.push('"'+enderecos[it]+'"');
+            }
+        }
+
+        for (it = 1; it < disponibilidades.length; it += 1) {
+            if (document.getElementById('stat-el-' + it).checked) {
+                disponibilidadesSelect.push('"'+disponibilidades[it]+'"');
+            }
+        }
+        data = [texto,enderecosSelect,categoriasSelect,disponibilidadesSelect];
+    }
+
+    function changeFilters() {
+        applyCatalogFilters();
+        getSearchResults();
+    }
+    // AJAX
+    function getSearchResults(firstSearch) {
+        console.log("Busca: " );
+        console.log("texto: " + data[0]);
+        console.log("enderecos: " + data[1]);
+        console.log("categorias: " + data[2]);
+        console.log("disponibilidades: " + data[3]);
+        $.ajax({
+            url : "searchCatalog/", // the endpoint
+            method : "GET", // http method
+            contentType: "application/x-www-form-urlencoded",
+            data : { 'texto' : data[0], 'enderecos' : '['+ data[1] +']', 'categorias' : '['+ data[2] +']', 'disponibilidades' : '['+ data[3] +']' }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                console.log("================")
+                console.log(json); // log the returned json to the console
+                var jsondata = JSON.parse(json.result)
+                queriedresources = []
+                for (var it = 0; it < jsondata.length; it += 1) {
+                  var obj = jsondata[it].fields;
+                  queriedresources.push(obj);
+                }
+                console.log(queriedresources)
+                if(firstSearch){
+                    fillCatalogFilters()
+                }
+                updateCatalog()
+
+                console.log("success"); // another sanity check
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+
+        });
+    };
+
+    function changeCatalogPage(id) {
+        "use strict";
+        currentcatalogpageindex = id;
+        fillTableResources();
+        normalizeNextPrevious(id);
+    }
+
+    function normalizeNextPrevious(id) {
+        var previous = document.getElementById('previous-button');
+        var next = document.getElementById('next-button');
+        previous.onclick = function () {
+            changeCatalogPage(id - 1)
+        };
+        next.onclick = function () {
+            changeCatalogPage(id + 1)
+        };
+
+        if (currentcatalogpageindex === 1) {
+            previous.onclick = '';
+        }
+
+        if (currentcatalogpageindex === pagesnumber) {
+            next.onclick = '';
+        }
+    }
+
+    function fillCatalogFilters() {
+        // "use strict";
+        var resources = queriedresources,
+            html = "",
+            it;
+
+            categorias = [filtertables[0]],
+            enderecos = [filtertables[1]],
+            disponibilidades = [filtertables[2]];
+        // get unique filter values
+
+        for (it = 0; it < resources.length; it += 1) {
+            if (categorias.indexOf(resources[it].categoria) < 0) {
+                categorias.push(resources[it].categoria);
+            }
+            if (enderecos.indexOf(resources[it].endereco) < 0) {
+                enderecos.push(resources[it].endereco);
+            }
+            if (disponibilidades.indexOf(resources[it].estado) < 0) {
+                disponibilidades.push(resources[it].estado);
+            }
+        }
+        // prepare the apply filters buton
+        for (it = 1; it < enderecos.length; it += 1) {
+            html += '<li><input type="checkbox" id="dep-el-' + it + '" name="dep-el-' + it + '" class="mdl-checkbox__input"><label for="dep-el-' + it + '">';
+            html += enderecos[it];
+            html += '</label></li>';
+
+        }
+        document.getElementById('ul-dropdown-dep').innerHTML = html;
+        html = '';
+        for (it = 1; it < categorias.length; it += 1) {
+            html += '<li><input type="checkbox" id="cat-el-' + it + '" name="cat-el-' + it + '" class="mdl-checkbox__input"><label for="cat-el-' + it + '">';
+            html += categorias[it];
+            html += '</label></li>';
+        }
+        document.getElementById('ul-dropdown-cat').innerHTML = html;
+
+        html = '';
+        for (it = 1; it < disponibilidades.length; it += 1) {
+            html += '<li><input type="checkbox" id="stat-el-' + it + '" name="stat-el-' + it + '" class="mdl-checkbox__input"><label for="stat-el-' + it + '">';
+            html += disponibilidades[it];
+            html += '</label></li>';
+        }
+        document.getElementById('ul-dropdown-stats').innerHTML = html;
+    }
+
+    function fillTableResources() {
+        "use strict";
+        var it,
+            html = '',
+            gridresources = [],
+            firstresourceindex = 0,
+            maxresourcesatpage = 10,
+            currentpagehtml = '<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">#PAGENUMBER#</button>',
+            otherpagehtml = '<button class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(#PAGENUMBER#)">#PAGENUMBER#</button>',
+            previouspagehtml,
+            nextpagehtml,
+            statuscolor = '';
+        // calculated needed number of pages
+        pagesnumber = Math.ceil(queriedresources.length / maxresourcesatpage);
+        firstresourceindex = (currentcatalogpageindex - 1) * maxresourcesatpage;
+        gridresources = queriedresources.slice(firstresourceindex, firstresourceindex + maxresourcesatpage);
+        // prepare pagination
+        html += '<div class="agendae-catalog-pagination">';
+        // html += '<span class="agendae-resource-box-title">Página: </span>';
+        if (pagesnumber > 1) {
+            previouspagehtml = '<button id="previous-button" class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(1)">Anterior</button>';
+            nextpagehtml = '<button id="next-button" class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(2)">Próxima</button>';
+        } else {
+            previouspagehtml = '<button id="previous-button" class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(1)">Anterior</button>';
+            nextpagehtml = '<button id="next-button" class="mdl-button mdl-js-button mdl-button--accent" onclick="changeCatalogPage(1)">Próxima</button>';
+        }
+        html += previouspagehtml;
+        for (it = 0; it < pagesnumber; it += 1) {
+            if (it + 1 === currentcatalogpageindex) {
+                html += currentpagehtml.replace("#PAGENUMBER#", String(it + 1)).replace("#PAGENUMBER#", String(it + 1));
+            } else {
+                html += otherpagehtml.replace("#PAGENUMBER#", String(it + 1)).replace("#PAGENUMBER#", String(it + 1));
+            }
+        }
+        html += nextpagehtml;
+        html += '</div>';
+
+        document.getElementById('resources-pagination').innerHTML = html;
+        html = "";
+
+        html += '<table class="resourceTable">';
+
+        if (gridresources.length === 0) {
+            // prepare no resources found card
+            html += '<div class="agendae-noresource-box agendae-resource-box mdl-card mdl-shadow--2dp">';
+            html += '<div class="agendae-resource-box-title"><b>Nenhum recurso encontrado!</b></div><hr>';
+            html += '<div class="agendae-resource-box-text"><b><i class="material-icons">youtube_searched_for</i></b></br>';
+            html += 'Tente refinar sua busca para encontrar mais resultados.';
+            html += '</div>';
+            html += '</div>';
+        } else {
+            html += '<tr>';
+            html += '<td>Nome</td>';
+            html += '<td>Localização</td>';
+            html += '<td>Código de Patrimônio</td>';
+            html += '<td>Categoria</td>';
+            html += '<td>Estado</td>';
+            html += '</tr>';
+
+            var count = 0;
+            for (it = 0; it < maxresourcesatpage; it += 1) {
+                // prepare status text style
+                if (count < gridresources.length) {
+                    console.log(gridresources[it].estado);
+
+                    if (gridresources[it].estado === "Disponível") {
+                        statuscolor = "green";
+                    } else if (gridresources[it].estado === "Em manutenção") {
+                        statuscolor = "orange";
+                    }
+                    else {
+                        statuscolor = "red";
+                    }
+                    // prepare line
+                    html += '<tr onclick=window.location.href="' + gridresources[it].patrimonio + '">';
+                    html += '<td style="width:20%">' + gridresources[it].nome + '</td>';
+                    html += '<td style="width:30%">' + gridresources[it].endereco + "</td>";
+                    html += '<td style="width:20%">' + gridresources[it].patrimonio + '</td>';
+                    html += '<td style="width:15%">' + gridresources[it].categoria + '</td>';
+                    html += '<td style="width:15%"><b style="color:' + statuscolor + ';">' + gridresources[it].estado + '</b></td>';
+                    html += '</tr>';
+
+                    count += 1;
+                } else {
+                    html += '<tr>';
+                    html += '<td></td>';
+                    html += '<td></td>';
+                    html += '<td></td>';
+                    html += '<td></td>';
+                    html += '<td></td>';
+                    html += '</tr>';
+                }
+            }
+        }
+        html += '</table>';
+        // apply changes
+        document.getElementById('resources-grid').innerHTML = html;
+    }
+
+    function updateCatalog() {
+        'use strict';
+        // fillCatalogFilters()
+        fillTableResources()
+    }
+
+    //START!
+    getSearchResults(true);
+</script>
+
+{% endblock %}

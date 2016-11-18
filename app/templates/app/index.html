@@ -1,0 +1,55 @@
+{% extends  "app/base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+<div class="agendae-content-login mdl-layout__content">
+  <div class="agendae-highligth-section mdl-typography--text-center">
+    <img src="{% static 'images/agendae-logo-white-v1.png' %}" class ="agendae-logo-highlight">
+    <div class="logo-font agendae-sub-slogan">Sistena integrado de agendamento de recursos da UFRJ</div>
+
+    <div class="login-card-wide mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__supporting-text">
+        <form action="#">
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="text" id="username" />
+            <label class="mdl-textfield__label" for="username">Usuário</label>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="password" id="userpass" />
+            <label class="mdl-textfield__label" for="userpass">Senha</label>
+          </div>
+        </form>
+      </div>
+      <span style="color: red; display: none;" id="loginfail">
+        <small>Senha ou Usuário inválidos. Caso não se lembre das credênciais de acesso ou não possua cadastro, por favor entre em contato com o administrador de seu sistema.<small>
+      </span>
+      <div class="mdl-card__actions mdl-card--border">
+        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" onclick="doLogin()">
+          Entrar
+        </a>
+      </div>
+    </div>
+{% endblock %}
+
+{% block afterscripts %}
+<!--<script src="{% static 'javascript/getmdl-select.min.js' %}"></script>-->
+<script src="{% static 'javascript/fakehistory.js' %}"></script>
+<script src="{% static 'javascript/fakeavailability.js' %}"></script>
+<script src="{% static 'javascript/fakeschedule.js' %}"></script>
+<script src="{% static 'javascript/resources.js' %}"></script>
+<script src="{% static 'javascript/kalendae.standalone.js' %}" type="text/javascript" charset="utf-8"></script>
+
+<script>
+function doLogin() {
+    "use strict";
+    if (document.getElementById('username').value === "admin") {
+        if (document.getElementById('userpass').value === "admin") {
+            var newPath = window.location.origin + "/app/catalog/"
+            window.location = newPath;
+            return true;
+        }
+    }
+    document.getElementById('loginfail').style.display = "inline";
+    return false;
+}</script>
+{% endblock %}

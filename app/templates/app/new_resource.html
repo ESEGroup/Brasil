@@ -1,0 +1,133 @@
+{% extends  "app/base.html" %}
+{% load staticfiles %}
+
+{% block before %}
+<!--<link rel="stylesheet" href="{% static 'css/getmdl-select.min.css' %}">-->
+{% endblock %}
+
+{% block content %}
+    <div class="agendae-content mdl-layout__content">
+
+        <div class="agendae-section-title"></div>
+
+        <div id="resource-container" class="mdl-grid  mdl-cell--9-col">
+
+            <div id="card-info" class="agendae-resource-container mdl-card mdl-shadow--8dp">
+                <div id="title-resource" style="display:flex; flex-direction: row; align-items: center;padding: 2vh 0 2vh 0;">
+                    <div style="margin-left: -2vh;"><a href="javascript:window.history.go(-1)"><img src="{% static 'images/ic_arrow_back_black_24dp_2x.png' %}"></img></a></div>
+                    <h3 style="padding-left:10%;" class="mdl-cell mdl-cell--12-col mdl-typography--headline">Novo Recurso</h3><br>
+                    <p style="padding-left:10%; color:red; display:none;" id='error-warn'>* Houve um erro inesperado. Por favor contactar o administrador do sistema.</p>
+
+                </div>
+
+                <div id="card-info" style="text-align:center;">
+                    <div id="text-container" style="padding-right: 2vh;">
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-name" width="80%">
+                            <label class="mdl-textfield__label" for="text-resource-name">Nome do recurso</label>
+                        </div>
+
+                        <p id='resource-name-null' style="color:red; display:none;"><br>* Esse campo não pode estar em branco</p>
+                        <br>
+
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-location" value="">
+                            <label class="mdl-textfield__label" for="text-resource-location">Localização</label>
+                        </div>
+
+                        <p id='resource-location-null' style="color:red; display:none;"><br>* Esse campo não pode estar em branco</p>
+
+                        <br>
+
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-id" onkeypress='return event.charCode >= 48 && event.charCode <= 57' value="">
+                            <label class="mdl-textfield__label" for="text-resource-id">Código de patrimônio (numérico)</label>
+                        </div>
+
+                        <p id='resource-id-warn' style="color:red; display:none;"><br>* Já existe um recurso com esse número de patrimônio. Verifique se o valr inserido está correto ou entre em contato com o administrador do seu departamento</p>
+                        <p id='resource-id-null' style="color:red; display:none;"><br>* Esse campo não pode estar em branco</p>
+
+                        <br>
+
+
+                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+                            <input class="mdl-textfield__input normal-text" type="text" id="text-resource-cat">
+                            <label class="mdl-textfield__label" for="text-resource-cat">Categoria</label>
+                        </div>
+
+                        <p id='resource-id-null' style="color:red; display:none;"><br>* Esse campo não pode estar em branco</p>
+
+                        <br>
+
+
+                        <div id="resource-desc" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label extrawide">
+                            <textarea class="mdl-textfield__input normal-text" type="text" rows="3"
+                                      id="text-resource-desc"></textarea>
+                            <label class="mdl-textfield__label" for="text-resource-desc">Descrição</label>
+                        </div>
+                        <br>
+                        <div id="button-cadastrar-recurso" style="" >
+                             <button id="button-agendar" style=""
+                                    class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
+                                    onclick="createResource()">Cadastrar recurso
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+{% endblock %}
+
+{% block afterscripts %}
+<!--<script src="{% static 'javascript/getmdl-select.min.js' %}"></script>-->
+<script src="{% static 'javascript/fakehistory.js' %}"></script>
+<script src="{% static 'javascript/fakeavailability.js' %}"></script>
+<script src="{% static 'javascript/fakeschedule.js' %}"></script>
+<script src="{% static 'javascript/resources.js' %}"></script>
+<script src="{% static 'javascript/kalendae.standalone.js' %}" type="text/javascript" charset="utf-8"></script>
+
+<script>
+// AJAX
+function createResource() {
+
+    nome = $('#text-resource-name').val()
+    if (nome == "") { $("#resource-name-null").css("display", "inline"); return;}
+    patrimonio = $('#text-resource-id').val()
+    if (patrimonio == "") { $("#resource-id-null").css("display", "inline"); return;}
+    endereco = $('#text-resource-location').val()
+    if (endereco == "") { $("#resource-location-null").css("display", "inline"); return;}
+
+    $.ajax({
+        url : "createNewResource/", // the endpoint
+        method : "GET", // http method
+        contentType: "application/x-www-form-urlencoded",
+
+        data : { nome : nome, endereco : endereco, patrimonio : patrimonio, categoria : $('#text-resource-cat').val(), descricao : $('#text-resource-desc').val() },
+
+        // handle a successful response
+        success : function(json) {
+            console.log("================")
+            console.log(json); // log the returned json to the console
+            if (json.error != "") {
+              $("#resource-id-warn").css("display", "inline");
+              return
+            }
+            var newPath = window.location.origin + "/app/catalog/" + json.result;
+            window.location = newPath;
+        },
+
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            $("#error-warn").css("display", "inline");
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+    });
+};
+</script>
+{% endblock %}
