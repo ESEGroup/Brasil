@@ -18,25 +18,23 @@ As seguintes tecnologias são necessárias para o bom funcionamento do sistema:
 
 Todas as outras dependências e bibliotecas externas já estão acopladas nesse repositório e não necessitam de maior atenção do usuário. O sistema de base de dados utilizado foi o `sqlite3` fornecido pelo próprio Django.
 
-#### Instalação do Django
-
-Para usuários do sistema operacional Linux, basta digitar os comandos a seguir no terminal de controle.
-
-```
-source env/bin/activate
-python3 manage.py runserver
-
-```
-
-### Inicializando o sistema
-
-Efetue os seguintes passos:
+#### Inicializando o ambiente
 
 - Faça download o clone o repositório para um diretório dentro de sua preferência. Em caso de download do arquivo .zip não se esqueça de extrair os aqruivos.
 - Utillizando o terminal, navegue até o diretório que você extraiu esse repositório e digite o seguinte comando:
+```
+source env/bin/activate
 
 ```
-python manage.py runserver
+
+### Inicializando o servidor
+
+Efetue os seguintes passos:
+
+Para usuários do sistema operacional Linux, basta navegar até o diretório que foi extraido o repositório e digitar o comando a seguir no terminal de controle.
+
+```
+python3 manage.py runserver
 ```
 
 - Acesse a aplicação em `http://127.0.0.1:8000/app/` ou `localhost:8000/app/`
