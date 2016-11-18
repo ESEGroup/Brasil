@@ -23,10 +23,7 @@ Todas as outras dependências e bibliotecas externas já estão acopladas nesse 
 Para usuários do sistema operacional Linux, basta digitar os comandos a seguir no terminal de controle.
 
 ```
-sudo apt-get update
-sudo apt-get install python-django python-pip3
-pip3 install django djangorestframework
-django-admin --version
+source env/bin/activate
 python3 manage.py runserver
 
 ```
