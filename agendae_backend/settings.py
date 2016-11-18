@@ -33,8 +33,11 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'app.apps.AppConfig',
+<<<<<<< HEAD
     'rest_framework',
     'rest_framework.authtoken',
+=======
+>>>>>>> 6120abc30815cf0e9fee8b56b513cb60bcb4e82b
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -125,6 +128,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+<<<<<<< HEAD
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
@@ -134,3 +138,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     )
 }
+=======
+>>>>>>> 6120abc30815cf0e9fee8b56b513cb60bcb4e82b

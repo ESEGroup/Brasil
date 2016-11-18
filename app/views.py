@@ -3,7 +3,10 @@ from django.template import loader
 from django.http import HttpResponse, Http404
 from app.models import BuscaRecurso, Recurso
 from django.core import serializers
+<<<<<<< HEAD
 from .serializers import UserSerializer, GroupSerializer
+=======
+>>>>>>> 6120abc30815cf0e9fee8b56b513cb60bcb4e82b
 import json
 
 def index(request):

@@ -17,6 +17,10 @@ from django.conf.urls import include, url
 from django.contrib import admin
 
 urlpatterns = [
+<<<<<<< HEAD
     url(r'^', include('app.urls')),
+=======
+    url(r'^app/', include('app.urls')),
+>>>>>>> 6120abc30815cf0e9fee8b56b513cb60bcb4e82b
     url(r'^admin/', admin.site.urls),
 ]
