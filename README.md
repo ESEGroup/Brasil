@@ -14,7 +14,6 @@ Ao longo do curso foram levantados diversos requisitos e estabelecidas inumeras 
 As seguintes tecnologias são necessárias para o bom funcionamento do sistema:
 
 - Python 3
-- Django 1.10.3
 
 Todas as outras dependências e bibliotecas externas já estão acopladas nesse repositório e não necessitam de maior atenção do usuário. O sistema de base de dados utilizado foi o `sqlite3` fornecido pelo próprio Django.
 
@@ -28,8 +27,6 @@ source env/bin/activate
 ```
 
 ### Inicializando o servidor
-
-Efetue os seguintes passos:
 
 Para usuários do sistema operacional Linux, basta navegar até o diretório que foi extraido o repositório e digitar o comando a seguir no terminal de controle.
 
