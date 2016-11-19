@@ -20,6 +20,10 @@ class Agendamento (models.Model):
         default = 'AG',
     )
 
+    def __str__(self):
+
+        return self.recurso.nome + ' - '+ str(self.inicio)
+
     class Meta:
         db_table = 'Agendamentos'
         app_label = 'app'

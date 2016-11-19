@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from rest_framework.authtoken import views as authviews
 
 from . import views
 
@@ -17,3 +18,9 @@ urlpatterns = [
 ]
 
 urlpatterns += staticfiles_urlpatterns()
+
+#rest webservices
+urlpatterns +=[
+    url(r'^ws/login/', authviews.obtain_auth_token, name='login'),
+    url(r'^ws/logout/', views.logout, name='logout'),
+]

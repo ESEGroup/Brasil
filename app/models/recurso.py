@@ -49,6 +49,9 @@ class Recurso(models.Model):
     #    default = '000',
     #)
 
+    def __str__(self):
+        return self.nome + ' - '+ str(self.patrimonio)
+
     class Meta:
         db_table = 'Recursos'
         app_label = 'app'

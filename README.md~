@@ -5,12 +5,12 @@ Repositório do projeto do grupo Brasil
 '''
 sudo apt-get update
 
-sudo apt-get install python-django python-pip3
+sudo apt-get install python-django python-pip
 
-pip3 install django
+pip install django
 
 django-admin --version
 
-python3 manage.py runserver
+python manage.py runserver
 
 '''
