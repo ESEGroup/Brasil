@@ -43,14 +43,13 @@ Saída (Exceção)
 
 ##Logout
 Recebe token de um usuário e o renova internamente
-- Endereço: http://localhost:8000/ws/login/
+- Endereço: http://localhost:8000/ws/logout/
 - Método: POST, DELETE
 
 Exemplo:
 
 Entrada:
 ```
-Header: Content-Type: application/json
 Body: vazio ou qualquer
 ```
 Saída

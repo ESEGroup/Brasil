@@ -1,6 +1,8 @@
+import sys
 from django.shortcuts import render
 from django.template import loader
 from django.http import HttpResponse, Http404
+from django.conf import settings
 from app.models import BuscaRecurso, Recurso
 from django.core import serializers
 from rest_framework.response import Response
@@ -8,6 +10,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes  
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer, GroupSerializer
 
 import json
@@ -190,11 +193,24 @@ def person(request):
 
 # Create your webservices here.
 
-@api_view(['GET','POST','DELETE'])
+@api_view(['POST','DELETE'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((IsAuthenticated,))
 def logout(request):
-    jsondata=json.loads(request.body.decode("utf-8"))
-    print (jsondata)
-    return Response(status=status.HTTP_201_CREATED)
+    #jsondata=json.loads(request.body.decode("utf-8"))
+    #print (jsondata)
+    data ={}
+    try:
+        t=Token.objects.get(user=request.user)
+        if settings.DEBUG: print ("Input: {\"op\":\"refreshToken\",\"user:\"\""+str(request.user)+"\"}")
+        t.delete()
+        Token.objects.create(user=request.user)
+        data = {"status":"sucesso"}
+        return Response(data,status=status.HTTP_202_ACCEPTED)
+    except:
+        data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
+        return Response(data,status=status.HTTP_400_BAD_REQUEST)
+    finally:
+        if settings.DEBUG: print ("Output: ",data)
+
 
