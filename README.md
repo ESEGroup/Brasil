@@ -34,7 +34,7 @@ Para usuários do sistema operacional Linux, basta navegar até o diretório que
 python3 manage.py runserver
 ```
 
-- Acesse a aplicação em `http://127.0.0.1:8000/app/` ou `localhost:8000/app/`
+- Acesse a aplicação em `http://127.0.0.1:8000/` ou `localhost:8000/`
 - Utilize o usuário **admin** e a senha **admin** para se autenticar no sistema.
 
 
