@@ -1,6 +1,6 @@
 import sys
+import json
 from django.shortcuts import render
-from django.template import loader
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from app.models import BuscaRecurso, Recurso
@@ -11,23 +11,29 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authtoken.models import Token
-from .serializers import UserSerializer, GroupSerializer
 
-import json
+#static pages
 
 def index(request):
-    template = loader.get_template('app/index.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+    return render(request, 'app/index.html', {})
 
 def catalog(request):
-    template = loader.get_template('app/catalog.html')
+    return render(request, 'app/catalog.html', {})
 
-    context = {}
-    # do it
-    return HttpResponse(template.render(context, request))
+def about(request):
+    return render(request, 'app/about.html', {})
 
-    # ajax
+def people(request):
+    return render(request, 'app/people.html', {})
+
+def person(request):
+    return render(request, 'app/person.html', {})
+
+def newResource(request):
+    return render(request, 'app/new_resource.html', {})
+
+# ajax
+
 def searchCatalog(request):
     if request.method == 'GET':
 
@@ -63,8 +69,6 @@ def searchCatalog(request):
         )
 
 def resource(request, id):
-    # prepare the layout
-    template = loader.get_template('app/resource.html')
     # search
     s = BuscaRecurso()
     s.params = '{"type": "match", "id": ' + str(id) + '}'
@@ -76,12 +80,7 @@ def resource(request, id):
     #context = {'id': id}
     context = {'res': res}
     # do it
-    return HttpResponse(template.render(context, request))
-
-def newResource(request):
-    template = loader.get_template('app/new_resource.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
+    return render(request, 'app/resource.html', context)
 
 def createNewResource(request):
         if request.method == 'GET':
@@ -174,24 +173,6 @@ def updateResource(request,patrimonio):
                 content_type="application/json"
             )
 
-def about(request):
-    template = loader.get_template('app/about.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def people(request):
-    template = loader.get_template('app/people.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-
-def person(request):
-    template = loader.get_template('app/person.html')
-    context = {}
-    return HttpResponse(template.render(context, request))
-# Create your views here.
-
-
-# Create your webservices here.
 
 @api_view(['POST','DELETE'])
 @authentication_classes((TokenAuthentication,))
@@ -202,7 +183,9 @@ def logout(request):
     data ={}
     try:
         t=Token.objects.get(user=request.user)
-        if settings.DEBUG: print ("Input: {\"op\":\"refreshToken\",\"user:\"\""+str(request.user)+"\"}")
+        if settings.DEBUG: 
+            print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ")
+            print ("{\"user:\"\"",str(request.user),"\"}")
         t.delete()
         Token.objects.create(user=request.user)
         data = {"status":"sucesso"}
@@ -214,3 +197,4 @@ def logout(request):
         if settings.DEBUG: print ("Output: ",data)
 
 
+# Create your views here.
