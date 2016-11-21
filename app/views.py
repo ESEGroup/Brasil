@@ -9,7 +9,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes  
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from .permissions import *
+from .models import CadastroUsuario
 from rest_framework.authtoken.models import Token
 
 #static pages
@@ -176,16 +177,14 @@ def updateResource(request,patrimonio):
 
 @api_view(['POST','DELETE'])
 @authentication_classes((TokenAuthentication,))
-@permission_classes((IsAuthenticated,))
+@permission_classes((AllowAll,))
 def logout(request):
-    #jsondata=json.loads(request.body.decode("utf-8"))
-    #print (jsondata)
     data ={}
+    if settings.DEBUG: 
+        print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
+        print ("{\"user:\"\"",str(request.user),"\"}")
     try:
         t=Token.objects.get(user=request.user)
-        if settings.DEBUG: 
-            print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ")
-            print ("{\"user:\"\"",str(request.user),"\"}")
         t.delete()
         Token.objects.create(user=request.user)
         data = {"status":"sucesso"}
@@ -195,6 +194,30 @@ def logout(request):
         return Response(data,status=status.HTTP_400_BAD_REQUEST)
     finally:
         if settings.DEBUG: print ("Output: ",data)
+
+
+@api_view(['POST','PUT'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((AdminOnly,))
+def CadastroFuncionario(request):
+    jsonInput=json.loads(request.body.decode("utf-8"))
+    data ={}
+    if settings.DEBUG: 
+        print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
+        print (jsonInput)
+    try:
+        cad = CadastroUsuario()
+        cad.parser(jsonInput)
+        cad.solicitante = request.user
+        cad.cadastrar()
+        data = {"status":"sucesso"}
+        return Response(data,status=status.HTTP_202_ACCEPTED)
+    except:
+        data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
+        return Response(data,status=status.HTTP_400_BAD_REQUEST)
+    finally:
+        if settings.DEBUG: print ("Output: ",data)
+
 
 
 # Create your views here.
