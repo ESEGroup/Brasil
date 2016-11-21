@@ -23,4 +23,5 @@ urlpatterns += staticfiles_urlpatterns()
 urlpatterns +=[
     url(r'^ws/login/', authviews.obtain_auth_token, name='login'),
     url(r'^ws/logout/', views.logout, name='logout'),
+    url(r'^ws/cadastro/funcionario/', views.CadastroFuncionario, name='cadastroFuncionario'),
 ]
