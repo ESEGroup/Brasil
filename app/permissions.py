@@ -1,6 +1,9 @@
 from rest_framework.permissions import BasePermission
 from rest_framework.compat import is_authenticated
 from django.contrib.auth.models import User, Group
+from .models import SettingsUserGroups
+
+settingsUserGroups = SettingsUserGroups()
 
 class AllowAll(BasePermission):
 
@@ -16,7 +19,7 @@ class AdminOnly(BasePermission):
 		#group = request.user.groups.all()[0].pk
 
 		if  request.user and is_authenticated(request.user):
-			return request.user.groups.filter(pk='5').exists() or request.user.groups.filter(pk='6').exists()
+			return request.user.groups.filter(pk=settingsUserGroups.SuperAdminGroup).exists() or request.user.groups.filter(pk=settingsUserGroups.AdminGroup).exists()
 		else:
 			return False
 
@@ -29,7 +32,7 @@ class SuperAdminOnly(BasePermission):
 		#group = request.user.groups.all()[0].pk
 		
 		if  request.user and is_authenticated(request.user):
-			return request.user.groups.filter(pk='5').exists()
+			return request.user.groups.filter(pk=settingsUserGroups.SuperAdminGroup).exists()
 		else:
 			return False
 

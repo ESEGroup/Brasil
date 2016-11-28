@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from rest_framework.authtoken import views as authviews
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
 
@@ -21,7 +22,10 @@ urlpatterns += staticfiles_urlpatterns()
 
 #rest webservices
 urlpatterns +=[
-    url(r'^ws/login/', authviews.obtain_auth_token, name='login'),
-    url(r'^ws/logout/', views.logout, name='logout'),
-    url(r'^ws/cadastro/funcionario/', views.CadastroFuncionario, name='cadastroFuncionario'),
+    url(r'^ws/login/$', authviews.obtain_auth_token, name='login'),
+    url(r'^ws/logout/$', views.logout, name='logout'),
+    url(r'^ws/getinfousuario/$', views.getInfoUsuario, name='getInfoUsuario'),
+    url(r'^ws/(?P<typeOp>[\w\-]+)/funcionario/$', views.CadastroFuncionario, name='cadastroFuncionario'),
+    url(r'^ws/(?P<typeOp>[\w\-]+)/administrador/$', views.CadastroAdministrador, name='cadastroAdministrador'),
+    url(r'^ws/(?P<typeOp>[\w\-]+)/superadministrador/$', views.CadastroSuperAdministrador, name='cadastroSuperAdministrador'),
 ]

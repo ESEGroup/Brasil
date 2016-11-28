@@ -9,8 +9,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes  
 from rest_framework.authentication import TokenAuthentication
-from .permissions import *
-from .models import CadastroUsuario
+from .permissions import AllowAll,AdminOnly,SuperAdminOnly
+from .models import CadastroUsuario, SettingsUserGroups, Usuario
 from rest_framework.authtoken.models import Token
 
 #static pages
@@ -175,6 +175,36 @@ def updateResource(request,patrimonio):
             )
 
 
+from .models import Usuario
+@api_view(['POST','GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((AllowAll,))
+def getInfoUsuario(request):
+    data ={}
+    if settings.DEBUG: 
+        print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
+        print ("{\"user:\"\"",str(request.user),"\"}")
+    try:
+        request.usuario = Usuario.objects.get(user=request.user)
+        data = {
+            'username:': request.usuario.user.username, 
+            'group:':request.usuario.user.groups.all()[0].name,
+            'first_name': request.usuario.user.first_name,
+            'last_name': request.usuario.user.last_name,
+            'is_active': request.usuario.user.is_active,
+            'last_login': request.usuario.user.last_login,
+            'date_joined': request.usuario.user.date_joined,
+            'departamento':request.usuario.departamento,
+            'registro': request.usuario.registro
+            }
+        
+        return Response(data,status=status.HTTP_202_ACCEPTED)
+    except:
+        data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
+        return Response(data,status=status.HTTP_400_BAD_REQUEST)
+    finally:
+        if settings.DEBUG: print ("Output: ",data)
+
 @api_view(['POST','DELETE'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((AllowAll,))
@@ -191,17 +221,19 @@ def logout(request):
         return Response(data,status=status.HTTP_202_ACCEPTED)
     except:
         data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
-        return Response(data,status=status.HTTP_400_BAD_REQUEST)
+        return Response(data,status=status.HTTP_400_BAD_REQUEST,exception=True)
     finally:
         if settings.DEBUG: print ("Output: ",data)
 
 
-@api_view(['POST','PUT'])
+@api_view(['POST','GET'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((AdminOnly,))
-def CadastroFuncionario(request):
+def CadastroFuncionario(request,typeOp):
+    settingsUserGroups = SettingsUserGroups()
     jsonInput=json.loads(request.body.decode("utf-8"))
     data ={}
+    group = settingsUserGroups.FuncGroup
     if settings.DEBUG: 
         print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
         print (jsonInput)
@@ -209,15 +241,83 @@ def CadastroFuncionario(request):
         cad = CadastroUsuario()
         cad.parser(jsonInput)
         cad.solicitante = request.user
-        cad.cadastrar()
-        data = {"status":"sucesso"}
+        if not(cad.has_permission()):
+            data = {"detail": "Você não tem permissão para executar essa ação."}
+            return Response(data,status=status.HTTP_401_UNAUTHORIZED)
+
+        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":    
+            data["PrimaryKey"] = cad.cadastrar(group=group)
+        elif typeOp == "atualizar" or typeOp == "atualizacao" or typeOp == "update":
+            cad.atualizar()
+        elif typeOp == "deletar" or typeOp == "delecao" or typeOp == "delete":
+            cad.deletar()
+
+        data["status"] = "sucesso" 
         return Response(data,status=status.HTTP_202_ACCEPTED)
     except:
         data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
-        return Response(data,status=status.HTTP_400_BAD_REQUEST)
+        return Response(data,status=status.HTTP_400_BAD_REQUEST,exception=True)
     finally:
         if settings.DEBUG: print ("Output: ",data)
 
+@api_view(['POST','GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((SuperAdminOnly,))
+def CadastroAdministrador(request,typeOp):
+    settingsUserGroups = SettingsUserGroups()
+    jsonInput=json.loads(request.body.decode("utf-8"))
+    data ={}
+    group = settingsUserGroups.AdminGroup
+    if settings.DEBUG: 
+        print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
+        print (jsonInput)
+    try:
+        cad = CadastroUsuario()
+        cad.parser(jsonInput)
+        cad.solicitante = request.user
 
+        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":    
+            data["PrimaryKey"] = cad.cadastrar(group=group)
+        elif typeOp == "atualizar" or typeOp == "atualizacao" or typeOp == "update":
+            cad.atualizar()
+        elif typeOp == "deletar" or typeOp == "delecao" or typeOp == "delete":
+            cad.deletar()
 
+        data["status"] = "sucesso" 
+        return Response(data,status=status.HTTP_202_ACCEPTED)
+    except:
+        data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
+        return Response(data,status=status.HTTP_400_BAD_REQUEST,exception=True)
+    finally:
+        if settings.DEBUG: print ("Output: ",data)    
+
+@api_view(['POST','GET'])
+@authentication_classes((TokenAuthentication,))
+@permission_classes((SuperAdminOnly,))
+def CadastroSuperAdministrador(request,typeOp):
+    settingsUserGroups = SettingsUserGroups()
+    jsonInput=json.loads(request.body.decode("utf-8"))
+    data ={}
+    group = settingsUserGroups.SuperAdminGroup
+    if settings.DEBUG: 
+        print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
+        print (jsonInput)
+    try:
+        cad = CadastroUsuario()
+        cad.parser(jsonInput)
+        cad.solicitante = request.user
+
+        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":    
+            data["PrimaryKey"] = cad.cadastrar(group=group)
+        elif typeOp == "atualizar" or typeOp == "atualizacao" or typeOp == "update":
+            cad.atualizar()
+
+        data["status"] = "sucesso" 
+        return Response(data,status=status.HTTP_202_ACCEPTED)
+    except:
+        data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
+        return Response(data,status=status.HTTP_400_BAD_REQUEST,exception=True)
+    finally:
+        if settings.DEBUG: print ("Output: ",data) 
+        
 # Create your views here.
