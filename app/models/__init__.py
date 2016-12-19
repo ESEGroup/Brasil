@@ -1,5 +1,4 @@
 #https://code.djangoproject.com/wiki/CookBookSplitModelsToFiles
-from .banco_acesso            import BancoAcesso
 from .usuario                 import Usuario
 from .recurso                 import Recurso
 from .agendamento             import Agendamento
@@ -11,3 +10,4 @@ from .cadastro_recurso        import CadastroRecurso
 from .cadastro_usuario        import CadastroUsuario
 from .busca                   import Busca, BuscaRecurso, BuscaUsuario
 from .gerenciador             import GerenciadorAgendamento
+from .settingsgroups          import SettingsUserGroups
