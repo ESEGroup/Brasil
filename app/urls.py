@@ -28,4 +28,5 @@ urlpatterns +=[
     url(r'^ws/(?P<typeOp>[\w\-]+)/funcionario/$', views.CadastroFuncionario, name='cadastroFuncionario'),
     url(r'^ws/(?P<typeOp>[\w\-]+)/administrador/$', views.CadastroAdministrador, name='cadastroAdministrador'),
     url(r'^ws/(?P<typeOp>[\w\-]+)/superadministrador/$', views.CadastroSuperAdministrador, name='cadastroSuperAdministrador'),
+    url(r'^ws/cadastro/agendamento/$', views.CadastroAgendamento, name='cadastroAgendamento'),
 ]

@@ -9,5 +9,6 @@ from .notificador_agendamento import NotificadorAgendamento
 from .busca                   import Busca, BuscaRecurso, BuscaUsuario
 from .cadastro_recurso        import CadastroRecurso
 from .cadastro_usuario        import CadastroUsuario
+from .cadastro_agendamento    import CadastroAgendamento
 from .gerenciador             import GerenciadorAgendamento
 from .settingsgroups          import SettingsUserGroups
