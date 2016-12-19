@@ -10,7 +10,7 @@ class CadastroRecurso(Cadastro):
     def cadastrar (self, nome, patrimonio, endereco, categoria, descricao):
         s = BuscaRecurso()
         s.params = '{"type": "match", "id": ' + str(patrimonio) + '}'
-        print(s.params)
+        #print(s.params)
         res = s.buscar()
 
         if res != "DoesNotExist ERROR":
@@ -24,7 +24,7 @@ class CadastroRecurso(Cadastro):
 
         s = BuscaRecurso()
         s.params = '{"type": "match", "id": ' + str(patrimonio) + '}'
-        print(s.params)
+        #print(s.params)
         res = s.buscar()
 
         if res == "DoesNotExist ERROR":
@@ -39,8 +39,18 @@ class CadastroRecurso(Cadastro):
         res.save()
         return True
 
-    def deletar ():
-        return False
+    def deletar (self, patrimonio):
+        s = BuscaRecurso()
+        s.params = '{"type": "match", "id": ' + str(patrimonio) + '}'
+        #print(s.params)
+        res = s.buscar()
+
+        if res == "DoesNotExist ERROR":
+            # if resource already exists..
+            return False
+
+        res.delete()
+        return True
 
     def notificar ():
         return False

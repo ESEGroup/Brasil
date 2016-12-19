@@ -57,7 +57,7 @@ def searchCatalog(request):
         response_data = {}
         response_data['result'] = serializers.serialize('json', res)
         #print()
-        print (s.params)
+        #print (s.params)
         #print (response_data)
         return HttpResponse(
             json.dumps(response_data),
