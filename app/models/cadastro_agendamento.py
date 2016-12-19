@@ -15,11 +15,22 @@ class CadastroAgendamento(Cadastro):
 
 
     def has_permission(self):
-        #if self.solicitante.groups.all()[0].pk == self.settingsUserGroups.AdminGroup:
-         #   if Usuario.objects.get(user=self.solicitante).departamento != self.usuarioTemplate.departamento:
-        #        return False
-            #if self.usuario.departamento != self.usuarioTemplate.departamento:
-            #    return False  
+        if self.solicitante.groups.all()[0].pk == self.settingsUserGroups.SuperAdminGroup:
+            return True
+        elif self.solicitante.groups.all()[0].pk == self.settingsUserGroups.AdminGroup:
+            usuario = Usuario.objects.get(user=self.solicitante)
+            if self.agendamentoTemplate.usuario.departamento == usuario.departamento:
+                return True
+            else:
+                return False
+        elif self.solicitante.groups.all()[0].pk == self.settingsUserGroups.FuncGroup:
+            if self.agendamentoTemplate.usuario.user == self.solicitante:
+                return True
+            else:
+                return False
+        else:
+            return False
+
         return True    
         
     def parser (self,json):

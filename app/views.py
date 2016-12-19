@@ -308,6 +308,9 @@ def CadastroAgendamentoController(request):
         cad = CadastroAgendamento()
         cad.parser(jsonInput)
         cad.solicitante = request.user
+        if not(cad.has_permission()):
+            data = {"detail": "Você não tem permissão para executar essa ação."}
+            return Response(data,status=status.HTTP_401_UNAUTHORIZED)
         data["PrimaryKey"] = cad.cadastrar()
        
 
