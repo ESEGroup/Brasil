@@ -37,7 +37,11 @@ python3 manage.py runserver
 - Acesse a aplicação em `http://127.0.0.1:8000/app/` ou `localhost:8000/app/`
 - Utilize o usuário **admin** e a senha **admin** para se autenticar no sistema.
 
+### Testando
 
+```
+python3 manage.py test app/tests/
+```
 
 ## Responsáveis
 
