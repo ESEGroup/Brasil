@@ -55,4 +55,92 @@ Body: vazio ou qualquer
 Saída
 ```
 {"status":"sucesso"}
+```
+##Cadastro de Usuários
+Cadastro para Funcionários, Administradores e SuperAdministradores
+- Endereços:http://localhost:8000/ws/cadastro/funcionario/
+            http://localhost:8000/ws/cadastro/administrador/
+            http://localhost:8000/ws/cadastro/superadministrador/
 
+- Método: POST, GET
+
+URLs diferentes para níveis de acesso diferentes definidos pelo token
+Exemplo:
+
+Entrada:
+```
+Body: {"username":"any", "email":"somethind@mail.com", "first_name" : " ", "last_name" : " ", "registro" : "58", "departamento" : "CT"}
+```
+Saída
+```
+{"status":"sucesso"}
+```
+##Atualização de Usuários
+Atualização de informações para Funcionários, Administradores e SuperAdministradores
+- Endereço: http://localhost:8000/ws/update/funcionario/
+            http://localhost:8000/ws/update/administrador/
+            http://localhost:8000/ws/update/superadministrador/
+- Método: POST, GET
+
+URLs diferentes para níveis de acesso diferentes definidos pelo token
+Exemplo:
+
+Entrada:
+```
+Body: {"pk":"6","username":"any", "password":"pass","email":"somethind@mail.com", "first_name" : " ", "last_name" : " ", "registro" : "58", "departamento" : "CT"}
+```
+Saída
+```
+{"status":"sucesso"}
+```
+
+##Deleção de Usuários
+Torna Funcionários, Administradores ou SuperAdministradores inativos
+- Endereço: http://localhost:8000/ws/delete/funcionario/
+            http://localhost:8000/ws/delete/administrador/
+            http://localhost:8000/ws/delete/superadministrador/
+- Método: POST, GET
+
+URLs diferentes para níveis de acesso diferentes definidos pelo token
+Exemplo:
+
+Entrada:
+```
+Body: {"pk":"6","username":"any", "password":"pass","email":"somethind@mail.com", "first_name" : " ", "last_name" : " ", "registro" : "58", "departamento" : "CT"}
+```
+Saída
+```
+{"status":"sucesso"}
+```
+
+##Cadastro de Agendamentos
+Cadastro para Agendamentos
+- Endereço: http://localhost:8000/ws/cadastro/agendamento/
+- Método: POST, GET
+
+Exemplo:
+
+Entrada:
+```
+{"username":"usertest", "patrimonio":"777474","inicio":"2006-10-25 14:30:59","periodo":"7"}
+```
+Saída
+```
+{"status":"sucesso","PrimaryKey":"6"}
+```
+
+##Deleção de Agendamentos
+Cadastro para Agendamentos
+- Endereço: http://localhost:8000/ws/cadastro/agendamento/
+- Método: POST, GET
+
+Exemplo:
+
+Entrada:
+```
+{"pk":"6","username":"usertest", "patrimonio":"777474","inicio":"2006-10-25 14:30:59","periodo":"7"}
+```
+Saída
+```
+{"status":"sucesso"}
+```
