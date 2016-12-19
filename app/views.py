@@ -225,6 +225,8 @@ def CadastroFuncionario(request,typeOp):
             cad.atualizar()
         elif typeOp == "deletar" or typeOp == "delecao" or typeOp == "delete":
             cad.deletar()
+        else:
+            return Response(data,status=status.HTTP_404_NOT_FOUND)
 
         data["status"] = "sucesso"
         return Response(data,status=status.HTTP_202_ACCEPTED)
@@ -256,6 +258,8 @@ def CadastroAdministrador(request,typeOp):
             cad.atualizar()
         elif typeOp == "deletar" or typeOp == "delecao" or typeOp == "delete":
             cad.deletar()
+        else:
+            return Response(data,status=status.HTTP_404_NOT_FOUND)
 
         data["status"] = "sucesso"
         return Response(data,status=status.HTTP_202_ACCEPTED)
@@ -285,6 +289,8 @@ def CadastroSuperAdministrador(request,typeOp):
             data["PrimaryKey"] = cad.cadastrar(group=group)
         elif typeOp == "atualizar" or typeOp == "atualizacao" or typeOp == "update":
             cad.atualizar()
+        else:
+            return Response(data,status=status.HTTP_404_NOT_FOUND)
 
         data["status"] = "sucesso"
         return Response(data,status=status.HTTP_202_ACCEPTED)
@@ -297,7 +303,7 @@ def CadastroSuperAdministrador(request,typeOp):
 @api_view(['POST','GET'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((AllowAll,))
-def CadastroAgendamentoController(request):
+def CadastroAgendamentoController(request,typeOp):
     settingsUserGroups = SettingsUserGroups()
     jsonInput=json.loads(request.body.decode("utf-8"))
     data ={}
@@ -311,7 +317,13 @@ def CadastroAgendamentoController(request):
         if not(cad.has_permission()):
             data = {"detail": "Você não tem permissão para executar essa ação."}
             return Response(data,status=status.HTTP_401_UNAUTHORIZED)
-        data["PrimaryKey"] = cad.cadastrar()
+
+        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":
+            data["PrimaryKey"] = cad.cadastrar()
+        elif typeOp == "deletar" or typeOp == "delecao" or typeOp == "delete":
+            cad.deletar()
+        else:
+            return Response(data,status=status.HTTP_404_NOT_FOUND)
        
 
         data["status"] = "sucesso"
