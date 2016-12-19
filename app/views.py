@@ -9,8 +9,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication
-from .permissions import AllowAll,AdminOnly,SuperAdminOnly
-from .models import CadastroUsuario, SettingsUserGroups, Usuario, CadastroAgendamento
+from app.permissions import AllowAll,AdminOnly,SuperAdminOnly
+from app.models import CadastroUsuario, SettingsUserGroups, Usuario, CadastroAgendamento
 from rest_framework.authtoken.models import Token
 
 #static pages
@@ -297,23 +297,25 @@ def CadastroSuperAdministrador(request,typeOp):
 @api_view(['POST','GET'])
 @authentication_classes((TokenAuthentication,))
 @permission_classes((AllowAll,))
-def CadastroAgendamento(request):
+def CadastroAgendamentoController(request):
     settingsUserGroups = SettingsUserGroups()
     jsonInput=json.loads(request.body.decode("utf-8"))
     data ={}
-    group = settingsUserGroups.SuperAdminGroup
     if settings.DEBUG:
         print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
         print (jsonInput)
     #try:
         cad = CadastroAgendamento()
+        cad.parser(jsonInput)
+        cad.solicitante = request.user
+        data["PrimaryKey"] = cad.cadastrar()
        
 
         data["status"] = "sucesso"
         return Response(data,status=status.HTTP_202_ACCEPTED)
     #except:
         data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
-        return Response(data,status=status.HTTP_400_BAD_REQUEST,exception=True)
+       # return Response(data,status=status.HTTP_400_BAD_REQUEST,exception=True)
     #finally:
         if settings.DEBUG: print ("Output: ",data)        
 
