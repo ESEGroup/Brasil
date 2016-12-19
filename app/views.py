@@ -3,11 +3,11 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.conf import settings
-from app.models import BuscaRecurso, Recurso
+from app.models import BuscaRecurso, Recurso, CadastroRecurso
 from django.core import serializers
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view, authentication_classes, permission_classes  
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication
 from .permissions import AllowAll,AdminOnly,SuperAdminOnly
 from .models import CadastroUsuario, SettingsUserGroups, Usuario
@@ -92,13 +92,16 @@ def createNewResource(request):
             categoria = str(request.GET.get('categoria'))
             descricao = str(request.GET.get('descricao'))
 
-            s = BuscaRecurso()
-            s.params = '{"type": "match", "id": ' + str(patrimonio) + '}'
-            print(s.params)
-            res = s.buscar()
-
-            if res != "DoesNotExist ERROR":
-                # if resource already exists..
+            cr = CadastroRecurso()
+            if (cr.cadastrar (nome, patrimonio, endereco, categoria, descricao)):
+                response_data = {}
+                response_data['result'] = patrimonio
+                response_data['error'] = ""
+                return HttpResponse(
+                    json.dumps(response_data),
+                    content_type="application/json"
+                )
+            else:
                 response_data = {}
                 response_data['result'] = '""'
                 response_data['error'] = "Resource already exists"
@@ -106,20 +109,6 @@ def createNewResource(request):
                     json.dumps(response_data),
                     content_type="application/json"
                 )
-
-            rec = Recurso(nome=nome, patrimonio=patrimonio, endereco=endereco, categoria=categoria, descricao=descricao)
-            rec.save()
-
-            response_data = {}
-            response_data['result'] = patrimonio 
-            response_data['error'] = ""
-            #print()
-            #print (s.params)
-            #print (response_data)
-            return HttpResponse(
-                json.dumps(response_data),
-                content_type="application/json"
-            )
         else:
             return HttpResponse(
                 json.dumps({"Info": "request method not supported"}),
@@ -134,14 +123,18 @@ def updateResource(request,patrimonio):
             categoria = str(request.GET.get('categoria'))
             descricao = str(request.GET.get('descricao'))
             estado = str(request.GET.get('estado'))
+            patrimonio = str(request.GET.get('patrimonio'))
 
-            s = BuscaRecurso()
-            s.params = '{"type": "match", "id": ' + str(patrimonio) + '}'
-            print(s.params)
-            res = s.buscar()
-
-            if res == "DoesNotExist ERROR":
-                # if resource already exists..
+            cr = CadastroRecurso()
+            if(cr.atualizar (patrimonio, nome, descricao, endereco, categoria, estado)):
+                response_data = {}
+                response_data['result'] = patrimonio
+                response_data['error'] = ""
+                return HttpResponse(
+                    json.dumps(response_data),
+                    content_type="application/json"
+                )
+            else:
                 response_data = {}
                 response_data['result'] = '""'
                 response_data['error'] = "Resource not found"
@@ -149,25 +142,6 @@ def updateResource(request,patrimonio):
                     json.dumps(response_data),
                     content_type="application/json"
                 )
-
-            # rec = Recurso(nome=nome, patrimonio=patrimonio, endereco=endereco, categoria=categoria, descricao=descricao)
-            res.nome=nome
-            res.endereco=endereco
-            res.categoria=categoria
-            res.descricao=descricao
-            res.estado=estado
-            res.save()
-
-            response_data = {}
-            response_data['result'] = patrimonio 
-            response_data['error'] = ""
-            #print()
-            #print (s.params)
-            #print (response_data)
-            return HttpResponse(
-                json.dumps(response_data),
-                content_type="application/json"
-            )
         else:
             return HttpResponse(
                 json.dumps({"Info": "request method not supported"}),
@@ -181,13 +155,13 @@ from .models import Usuario
 @permission_classes((AllowAll,))
 def getInfoUsuario(request):
     data ={}
-    if settings.DEBUG: 
+    if settings.DEBUG:
         print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
         print ("{\"user:\"\"",str(request.user),"\"}")
     try:
         request.usuario = Usuario.objects.get(user=request.user)
         data = {
-            'username:': request.usuario.user.username, 
+            'username:': request.usuario.user.username,
             'group:':request.usuario.user.groups.all()[0].name,
             'first_name': request.usuario.user.first_name,
             'last_name': request.usuario.user.last_name,
@@ -197,7 +171,7 @@ def getInfoUsuario(request):
             'departamento':request.usuario.departamento,
             'registro': request.usuario.registro
             }
-        
+
         return Response(data,status=status.HTTP_202_ACCEPTED)
     except:
         data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
@@ -210,7 +184,7 @@ def getInfoUsuario(request):
 @permission_classes((AllowAll,))
 def logout(request):
     data ={}
-    if settings.DEBUG: 
+    if settings.DEBUG:
         print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
         print ("{\"user:\"\"",str(request.user),"\"}")
     try:
@@ -234,7 +208,7 @@ def CadastroFuncionario(request,typeOp):
     jsonInput=json.loads(request.body.decode("utf-8"))
     data ={}
     group = settingsUserGroups.FuncGroup
-    if settings.DEBUG: 
+    if settings.DEBUG:
         print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
         print (jsonInput)
     try:
@@ -245,14 +219,14 @@ def CadastroFuncionario(request,typeOp):
             data = {"detail": "Você não tem permissão para executar essa ação."}
             return Response(data,status=status.HTTP_401_UNAUTHORIZED)
 
-        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":    
+        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":
             data["PrimaryKey"] = cad.cadastrar(group=group)
         elif typeOp == "atualizar" or typeOp == "atualizacao" or typeOp == "update":
             cad.atualizar()
         elif typeOp == "deletar" or typeOp == "delecao" or typeOp == "delete":
             cad.deletar()
 
-        data["status"] = "sucesso" 
+        data["status"] = "sucesso"
         return Response(data,status=status.HTTP_202_ACCEPTED)
     except:
         data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
@@ -268,7 +242,7 @@ def CadastroAdministrador(request,typeOp):
     jsonInput=json.loads(request.body.decode("utf-8"))
     data ={}
     group = settingsUserGroups.AdminGroup
-    if settings.DEBUG: 
+    if settings.DEBUG:
         print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
         print (jsonInput)
     try:
@@ -276,20 +250,20 @@ def CadastroAdministrador(request,typeOp):
         cad.parser(jsonInput)
         cad.solicitante = request.user
 
-        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":    
+        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":
             data["PrimaryKey"] = cad.cadastrar(group=group)
         elif typeOp == "atualizar" or typeOp == "atualizacao" or typeOp == "update":
             cad.atualizar()
         elif typeOp == "deletar" or typeOp == "delecao" or typeOp == "delete":
             cad.deletar()
 
-        data["status"] = "sucesso" 
+        data["status"] = "sucesso"
         return Response(data,status=status.HTTP_202_ACCEPTED)
     except:
         data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
         return Response(data,status=status.HTTP_400_BAD_REQUEST,exception=True)
     finally:
-        if settings.DEBUG: print ("Output: ",data)    
+        if settings.DEBUG: print ("Output: ",data)
 
 @api_view(['POST','GET'])
 @authentication_classes((TokenAuthentication,))
@@ -299,7 +273,7 @@ def CadastroSuperAdministrador(request,typeOp):
     jsonInput=json.loads(request.body.decode("utf-8"))
     data ={}
     group = settingsUserGroups.SuperAdminGroup
-    if settings.DEBUG: 
+    if settings.DEBUG:
         print ("Input: {\"function\":\"",str(sys._getframe().f_code.co_name),"} ",end="")
         print (jsonInput)
     try:
@@ -307,17 +281,17 @@ def CadastroSuperAdministrador(request,typeOp):
         cad.parser(jsonInput)
         cad.solicitante = request.user
 
-        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":    
+        if typeOp == "cadastrar" or typeOp == "cadastro" or typeOp == "create":
             data["PrimaryKey"] = cad.cadastrar(group=group)
         elif typeOp == "atualizar" or typeOp == "atualizacao" or typeOp == "update":
             cad.atualizar()
 
-        data["status"] = "sucesso" 
+        data["status"] = "sucesso"
         return Response(data,status=status.HTTP_202_ACCEPTED)
     except:
         data = {"non_field_errors":["Unexpected error:" + str(sys.exc_info()[0])]}
         return Response(data,status=status.HTTP_400_BAD_REQUEST,exception=True)
     finally:
-        if settings.DEBUG: print ("Output: ",data) 
-        
+        if settings.DEBUG: print ("Output: ",data)
+
 # Create your views here.
