@@ -15,8 +15,8 @@ class CadastroUsuario(Cadastro):
         if self.solicitante.groups.all()[0].pk == self.settingsUserGroups.AdminGroup:
             if Usuario.objects.get(user=self.solicitante).departamento != self.usuarioTemplate.departamento:
                 return False
-            if self.usuario.departamento != self.usuarioTemplate.departamento:
-                return False  
+            #if self.usuario.departamento != self.usuarioTemplate.departamento:
+            #    return False  
         return True    
 
     def parser (self,json):
