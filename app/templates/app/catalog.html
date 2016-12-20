@@ -80,6 +80,7 @@
 
 {% block beforescripts %}
 <script>
+   console.log(window.sessionStorage.getItem('userInfo-token'));
     var currentcatalogpageindex = 1,
         pagesnumber = 1,
         queriedresources = [];

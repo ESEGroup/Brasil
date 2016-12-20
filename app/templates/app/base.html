@@ -52,6 +52,7 @@
               <a class="mdl-navigation__link mdl-typography--text-uppercase" href="{% url 'index' %}">CADASTRO</a>
               <a class="mdl-navigation__link mdl-typography--text-uppercase" href="{% url 'about' %}">SOBRE</a>
               <a class="mdl-navigation__link mdl-typography--text-uppercase" href="https://ufrj.br/">UFRJ</a>
+              <a class="mdl-navigation__link mdl-typography--text-uppercase" onclick="logout()">LOGOUT</a>
             </nav>
           </div>
 
@@ -95,6 +96,31 @@
   <script src="https://code.getmdl.io/1.2.1/material.min.js"></script>
   <script src="{% static 'javascript/jquery-3.1.1.min.js' %}"></script>
   <script src="{% static 'javascript/utils.js' %}"></script>
+  <script>
+    function logout(){
+      $.ajax({
+        url: '/ws/logout/',
+        headers: {
+            'Authorization':'Token ' + window.sessionStorage.getItem('userInfo-token'),
+            'Content-Type':'application/json'
+        },
+        method: 'POST',
+        dataType: 'json',
+        data: {},
+        success: function(data){
+          window.sessionStorage.setItem('userInfo-token', '');
+          var newPath = window.location.origin;
+          window.location = newPath;
+        } ,
+        // handle a non-successful response
+        error : function(xhr,errmsg,err) {
+            console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+        }
+      });
+
+    }
+
+  </script>
   {% block afterscripts %} {% endblock %}
 </body>
 </html>

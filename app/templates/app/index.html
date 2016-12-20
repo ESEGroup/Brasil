@@ -42,14 +42,38 @@
 <script>
 function doLogin() {
     "use strict";
-    if (document.getElementById('username').value === "admin") {
-        if (document.getElementById('userpass').value === "admin") {
-            var newPath = window.location.origin + "/app/catalog/"
-            window.location = newPath;
-            return true;
-        }
-    }
-    document.getElementById('loginfail').style.display = "inline";
-    return false;
+    // if (document.getElementById('username').value === "admin") {
+    //     if (document.getElementById('userpass').value === "admin") {
+    //         var newPath = window.location.origin + "/app/catalog/"
+    //         window.location = newPath;
+    //         return true;
+    //     }
+    // }
+    $.ajax({
+            url : "/ws/login/", // the endpoint
+            method : "POST", // http method
+            contentType: "application/x-www-form-urlencoded",
+            data : { "password": document.getElementById('userpass').value , "username": document.getElementById('username').value }, // data sent with the post request
+
+            // handle a successful response
+            success : function(json) {
+                var token = json.token;
+                window.sessionStorage.setItem('userInfo-token', token);
+                console.log(token); // another sanity check
+                var newPath = window.location.origin + "/app/catalog/";
+                window.location = newPath;
+            },
+
+            // handle a non-successful response
+            error : function(xhr,errmsg,err) {
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+                document.getElementById('loginfail').style.display = "inline";
+            }
+
+        });
+
+
+    
+    // return false;
 }</script>
 {% endblock %}
