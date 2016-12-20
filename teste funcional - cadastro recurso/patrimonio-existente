@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://127.0.0.1:8000/app/" />
+<title>Patrimônio em branco</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Patrimônio em branco</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/app/</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=username</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=userpass</td>
+	<td>admin</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=span.mdl-button__ripple-container</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=button-add</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=text-resource-name</td>
+	<td>Pojetor Modleo XY</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=text-resource-location</td>
+	<td>Centro de Tecnologia - Bloco G</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=text-resource-id</td>
+	<td>234</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=text-resource-cat</td>
+	<td>PJ004</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=text-resource-desc</td>
+	<td>Projeta nas proporções 2:3</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=button-agendar</td>
+	<td></td>
+</tr>
+<tr>
+	<td>assertTextPresent</td>
+	<td></td>
+	<td>* Já existe um recurso com esse número de patrimônio. Verifique se o valr inserido está correto ou entre em contato com o administrador do seu departamento</td>
+</tr>
+</tbody></table>
+</body>
+</html>
