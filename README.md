@@ -35,7 +35,13 @@ python3 manage.py runserver
 ```
 
 - Acesse a aplicação em `http://127.0.0.1:8000/app/` ou `localhost:8000/app/`
-- Utilize o usuário **admin** e a senha **admin** para se autenticar no sistema.
+- Utilize o usuário **superadmin** e a senha **superadmin** para se autenticar no sistema.
+
+#### Criando novo usuário
+- Acesse http://127.0.0.1:8000/admin/
+- Utilize o usuário **superadmin** e a senha **superadmin** para se autenticar no sistema.
+- Na aba **Autenticação e Autorização administração** crie um usuário para o sistema
+- Na aba **APP** crie um usuário para a aplicação específica, no caso o Agendê. Esse usuário deve estar associado a um usuário já criado no sistema.
 
 ### Testando
 
